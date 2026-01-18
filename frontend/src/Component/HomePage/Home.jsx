@@ -1,14 +1,8 @@
 import axios from "axios";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import "./Home.css";
 
-import {
-  GraduationCap,
-  BarChart3,
-  Trophy,
-  Save,
-  Wand2,
-} from "lucide-react";
+import { GraduationCap, BarChart3, Trophy, Save, Wand2, Pencil, Trash2, X } from "lucide-react";
 
 import {
   ResponsiveContainer,
@@ -23,9 +17,11 @@ import {
   Legend,
 } from "recharts";
 
+const API = "http://127.0.0.1:8000";
+
 export default function Home() {
   const [form, setForm] = useState({
-    name: "John Doe",
+    name: "",
     gender: "Male",
     study_time: 5,
     previous_grade: 70,
@@ -39,38 +35,133 @@ export default function Home() {
   const [result, setResult] = useState(null);
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
+
+    const [editOpen, setEditOpen] = useState(false);
+  const [editId, setEditId] = useState(null);
+  const [editForm, setEditForm] = useState(null);
 
   const handleChange = ({ target: { name, value } }) => {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const predict = async () => {
+  const fetchStudents = async () => {
     try {
-      setLoading(true);
-      const res = await axios.post("http://127.0.0.1:8000/predict", {
-        ...form,
-        study_time: +form.study_time,
-        previous_grade: +form.previous_grade,
-        attendance: +form.attendance,
-        sleep_hours: +form.sleep_hours,
-      });
-      setResult(res.data);
+      const res = await axios.get(`${API}/students`);
+      setStudents(res.data || []);
     } catch (err) {
       console.log(err);
-      alert("Backend not running!");
-    } finally {
-      setLoading(false);
     }
   };
 
-  const saveRecord = () => {
-    if (!result) return alert("Please predict first!");
-    setStudents((prev) => [
-      ...prev,
-      { Name: form.name, Score: result.score, Category: result.category },
-    ]);
+  useEffect(() => {
+    fetchStudents();
+  }, []);
+
+  const predict = async () => {
+  if (!validateName()) return;
+
+  try {
+    setLoading(true);
+    const res = await axios.post(`${API}/predict`, {
+      ...form,
+      study_time: +form.study_time,
+      previous_grade: +form.previous_grade,
+      attendance: +form.attendance,
+      sleep_hours: +form.sleep_hours,
+    });
+    setResult(res.data);
+  } catch (err) {
+    console.log(err);
+    alert("Backend not running!");
+  } finally {
+    setLoading(false);
+  }
+};
+
+
+
+const validateName = () => {
+  if (!form.name.trim()) {
+    alert("Student Name is required!");
+    return false;
+  }
+  return true;
+};
+
+
+  const saveRecord = async () => {
+  if (!validateName()) return;
+  if (!result) return alert("Predict first!");
+
+  try {
+    setSaving(true);
+    await axios.post(`${API}/save`, form);
+    alert("Data saved");
+    await fetchStudents();
+  } catch (err) {
+    console.log(err);
+    alert("Save failed! Check backend & MongoDB connection.");
+  } finally {
+    setSaving(false);
+  }
+};
+
+
+const deleteStudent = async (id) => {
+    try {
+      await axios.delete(`${API}/students/${id}`);
+      await fetchStudents();
+    } catch (err) {
+      console.log(err);
+      alert("Delete failed!");
+    }
   };
 
+  const openEdit = (student) => {
+    setEditId(student._id);
+
+    setEditForm({
+      name: student.name || student.Name || "",
+      gender: student.gender || "Male",
+      study_time: student.study_time ?? 5,
+      previous_grade: student.previous_grade ?? 70,
+      attendance: student.attendance ?? 80,
+      sleep_hours: student.sleep_hours ?? 7,
+      family_support: student.family_support || "Yes",
+      motivation: student.motivation || "High",
+      extracurricular: student.extracurricular || "Yes",
+    });
+
+    setEditOpen(true);
+  };
+
+  const updateStudent = async () => {
+    try {
+      await axios.put(`${API}/students/${editId}`, {
+        ...editForm,
+        study_time: +editForm.study_time,
+        previous_grade: +editForm.previous_grade,
+        attendance: +editForm.attendance,
+        sleep_hours: +editForm.sleep_hours,
+      });
+
+      setEditOpen(false);
+      await fetchStudents();
+    } catch (err) {
+      console.log(err);
+      alert("Update failed!");
+    }
+  };
+
+
+
+
+
+
+
+
+  
   const metricsData = useMemo(
     () => [
       { name: "StudyTime", value: +form.study_time },
@@ -83,7 +174,9 @@ export default function Home() {
 
   const pieData = useMemo(() => {
     const dist = students.reduce((acc, cur) => {
-      acc[cur.Category] = (acc[cur.Category] || 0) + 1;
+      const cat = cur.Category || cur.category;
+      if (!cat) return acc;
+      acc[cat] = (acc[cat] || 0) + 1;
       return acc;
     }, {});
     return Object.keys(dist).map((key) => ({ name: key, value: dist[key] }));
@@ -102,6 +195,150 @@ export default function Home() {
 
   return (
     <div className="app">
+
+{editOpen && editForm && (
+  <div className="modalOverlay">
+    <div className="modalBox">
+      <div className="modalHead">
+        <h3>Edit Student</h3>
+        <button className="iconBtn" onClick={() => setEditOpen(false)}>
+          <X size={18} />
+        </button>
+      </div>
+
+      <div className="modalBody">
+        <div className="modalGrid">
+          <div className="field">
+            <label>Name</label>
+            <input
+              value={editForm.name}
+              onChange={(e) =>
+                setEditForm((prev) => ({ ...prev, name: e.target.value }))
+              }
+              
+            />
+          </div>
+
+          <div className="field">
+            <label>Gender</label>
+            <select
+              value={editForm.gender}
+              onChange={(e) =>
+                setEditForm((prev) => ({ ...prev, gender: e.target.value }))
+              }
+            >
+              <option>Male</option>
+              <option>Female</option>
+            </select>
+          </div>
+
+          <div className="field">
+            <label>Study Time</label>
+            <input
+              type="number"
+              value={editForm.study_time}
+              onChange={(e) =>
+                setEditForm((prev) => ({ ...prev, study_time: e.target.value }))
+              }
+            />
+          </div>
+
+          <div className="field">
+            <label>Previous Grade</label>
+            <input
+              type="number"
+              value={editForm.previous_grade}
+              onChange={(e) =>
+                setEditForm((prev) => ({
+                  ...prev,
+                  previous_grade: e.target.value,
+                }))
+              }
+            />
+          </div>
+
+          <div className="field">
+            <label>Attendance</label>
+            <input
+              type="number"
+              value={editForm.attendance}
+              onChange={(e) =>
+                setEditForm((prev) => ({ ...prev, attendance: e.target.value }))
+              }
+            />
+          </div>
+
+          <div className="field">
+            <label>Sleep Hours</label>
+            <input
+              type="number"
+              value={editForm.sleep_hours}
+              onChange={(e) =>
+                setEditForm((prev) => ({
+                  ...prev,
+                  sleep_hours: e.target.value,
+                }))
+              }
+            />
+          </div>
+
+          <div className="field">
+            <label>Family Support</label>
+            <select
+              value={editForm.family_support}
+              onChange={(e) =>
+                setEditForm((prev) => ({
+                  ...prev,
+                  family_support: e.target.value,
+                }))
+              }
+            >
+              <option>Yes</option>
+              <option>No</option>
+            </select>
+          </div>
+
+          <div className="field">
+            <label>Motivation</label>
+            <select
+              value={editForm.motivation}
+              onChange={(e) =>
+                setEditForm((prev) => ({ ...prev, motivation: e.target.value }))
+              }
+            >
+              <option>High</option>
+              <option>Medium</option>
+              <option>Low</option>
+            </select>
+          </div>
+
+          <div className="field">
+            <label>Extracurricular</label>
+            <select
+              value={editForm.extracurricular}
+              onChange={(e) =>
+                setEditForm((prev) => ({
+                  ...prev,
+                  extracurricular: e.target.value,
+                }))
+              }
+            >
+              <option>Yes</option>
+              <option>No</option>
+            </select>
+          </div>
+        </div>
+
+        <button className="btn primary" onClick={updateStudent}>
+          Update Record
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
+
+
       <div className="layout">
         <aside className="sidebar">
           <h3 className="sideTitle">Student Inputs</h3>
@@ -114,6 +351,7 @@ export default function Home() {
                 value={form.name}
                 onChange={handleChange}
                 placeholder="Student Name"
+                required
               />
             </div>
 
@@ -227,9 +465,9 @@ export default function Home() {
               {loading ? "Predicting..." : "Predict Score"}
             </button>
 
-            <button className="btn success" onClick={saveRecord}>
+            <button className="btn success" onClick={saveRecord} disabled={saving}>
               <Save size={18} />
-              Save Record
+              {saving ? "Saving..." : "Save Record"}
             </button>
           </div>
         </aside>
@@ -358,18 +596,43 @@ export default function Home() {
                         <th>Name</th>
                         <th>Score</th>
                         <th>Category</th>
+                        <th>Action</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {students.map((s, idx) => (
-                        <tr key={idx}>
-                          <td>{s.Name}</td>
-                          <td>{s.Score}</td>
-                          <td>
-                            <span className={badge(s.Category)}>{s.Category}</span>
-                          </td>
-                        </tr>
-                      ))}
+                      {students.map((s, idx) => {
+                        const name = s.Name || s.name;
+                        const score = s.Score ?? s.score;
+                        const category = s.Category || s.category;
+
+                        return (
+                          <tr key={s._id || idx}>
+                            <td>{name}</td>
+                            <td>{score}</td>
+                           <td>
+                              <span className={badge(category)}>{category}</span>
+                            </td>
+
+                            <td>
+                              <div className="actionCell">
+                                <button
+                                  className="iconBtn editBtn"
+                                  onClick={() => openEdit(s)}
+                                >
+                                  <Pencil size={16} />
+                                </button>
+
+                                <button
+                                  className="iconBtn delBtn"
+                                  onClick={() => deleteStudent(s._id)}
+                                >
+                                  <Trash2 size={16} />
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })}
                     </tbody>
                   </table>
                 </div>

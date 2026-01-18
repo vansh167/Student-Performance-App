@@ -1,14 +1,14 @@
 Terminal commands-: 
 
 --------------------------------------------Backend-----------------------------------------------
----->  cd./backend
+---->  cd ./backend
 
           1>  Run Backend -->   uvicorn main:app --reload
 
 
 
 --------------------------------------------Frontend----------------------------------------------
------> cd./frontend 
+-----> cd ./frontend 
 
           1> npm i            <----------- When you  run your project on any new window 
          

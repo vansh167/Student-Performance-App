@@ -1,0 +1,67 @@
+.dashboardPage {
+  height: calc(100vh - 70px);
+  overflow: hidden;
+  display: flex;
+}
+
+.dashboardSidebar {
+  width: 340px;
+  height: 100%;
+  padding: 18px;
+  overflow-y: auto;
+}
+
+.dashboardMain {
+  flex: 1;
+  height: 100%;
+  padding: 18px;
+  overflow-y: auto;
+}
+
+/* dark/light sidebar backgrounds */
+body[data-theme="dark"] .dashboardSidebar {
+  background: rgba(10, 14, 26, 0.65);
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+body[data-theme="light"] .dashboardSidebar {
+  background: white;
+  border-right: 1px solid #e5e7eb;
+}
+
+.panel {
+  border-radius: 18px;
+  padding: 16px;
+  margin-bottom: 14px;
+}
+
+body[data-theme="dark"] .panel {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+body[data-theme="light"] .panel {
+  background: white;
+  border: 1px solid #e5e7eb;
+}
+
+/* buttons */
+.btn {
+  width: 100%;
+  padding: 12px;
+  border-radius: 14px;
+  font-weight: 900;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.btn.primary {
+  background: linear-gradient(90deg, #2563eb, #22c55e);
+  color: white;
+}
+
+.btn.success {
+  background: linear-gradient(90deg, #22c55e, #16a34a);
+  color: white;
+}

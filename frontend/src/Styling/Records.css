@@ -1,0 +1,35 @@
+.recordsPage {
+  padding: 25px;
+}
+
+.recordsPage h1 {
+  margin-bottom: 15px;
+}
+
+.infoText {
+  opacity: 0.8;
+}
+
+.tableBox {
+  border-radius: 16px;
+  overflow: hidden;
+  margin-top: 12px;
+}
+
+body[data-theme="dark"] .tableBox {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+body[data-theme="light"] .tableBox {
+  background: white;
+  border: 1px solid #e5e7eb;
+}
+
+body[data-theme="dark"] .table th {
+  color: #93c5fd;
+}
+
+body[data-theme="light"] .table th {
+  color: #2563eb;
+}

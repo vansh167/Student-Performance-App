@@ -1,0 +1,28 @@
+.aboutPage {
+  padding: 25px;
+}
+
+.aboutPage h1 {
+  margin-bottom: 10px;
+}
+
+.aboutCard {
+  margin-top: 20px;
+  padding: 18px;
+  border-radius: 16px;
+}
+
+body[data-theme="dark"] .aboutCard {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+body[data-theme="light"] .aboutCard {
+  background: white;
+  border: 1px solid #e5e7eb;
+}
+
+.aboutCard ul {
+  margin-top: 10px;
+  padding-left: 18px;
+}

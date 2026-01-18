@@ -1,0 +1,31 @@
+Terminal commands-: 
+
+--------------------------------------------Backend-----------------------------------------------
+---->  cd./backend
+
+          1>  Run Backend -->   uvicorn main:app --reload
+
+
+
+--------------------------------------------Frontend----------------------------------------------
+-----> cd./fronmtend 
+
+          1> npm i            <----------- When you  run your project on any new window 
+         
+          2> Run Frontend -->  npm  run dev 
+
+
+
+
+
+
+
+
+
+
+
+--------------------------------------------sometime-----------------------------------------------
+
+          a>  install lucide-react
+          b>  npm install react-router-dom
+          c>  npm install axios recharts 

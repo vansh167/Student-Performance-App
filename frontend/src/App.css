@@ -1,0 +1,106 @@
+/* =========================
+   RESET
+========================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Inter, system-ui, Arial, sans-serif;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  transition: background 0.25s, color 0.25s;
+}
+
+/* =========================
+   DARK THEME
+========================= */
+body[data-theme="dark"] {
+  background: radial-gradient(circle at top left, #0f172a, #0b1020 50%, #050816);
+  color: #e5e7eb;
+}
+
+/* =========================
+   LIGHT THEME (NEW)
+========================= */
+body[data-theme="light"] {
+  background: #e3e7ec; /* ✅ clean light gray */
+  color: #0f172a;
+}
+
+/* -------------------------
+   COMMON COMPONENT COLORS
+------------------------- */
+
+/* Panel/Card surfaces */
+body[data-theme="light"] .panel,
+body[data-theme="light"] .card,
+body[data-theme="light"] .tableBox,
+body[data-theme="light"] .aboutCard {
+  background: #ffffff; /* ✅ clean white */
+  border: 1px solid #e6eaf2;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.06);
+}
+
+/* Navbar */
+body[data-theme="light"] .navbar {
+  background: rgba(255, 255, 255, 0.9);
+  border-bottom: 1px solid #e6eaf2;
+}
+
+/* Sidebar */
+body[data-theme="light"] .dashboardSidebar {
+  background: #ffffff;
+  border-right: 1px solid #e6eaf2;
+}
+
+/* Table */
+body[data-theme="light"] .table th {
+  color: #2563eb;
+  background: #f3f6ff;
+}
+
+body[data-theme="light"] .table td {
+  color: #0f172a;
+}
+
+body[data-theme="light"] .table tr:hover td {
+  background: #f6f8fc;
+}
+
+/* Inputs */
+body[data-theme="light"] input,
+body[data-theme="light"] select {
+  background: #f6f8fc;
+  border: 1px solid #d9e0ef;
+  color: #0f172a;
+}
+
+body[data-theme="light"] input:focus,
+body[data-theme="light"] select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+}
+
+/* Buttons */
+body[data-theme="light"] .theme-btn {
+  background: #f3f6ff;
+  border: 1px solid #d9e0ef;
+}
+
+/* Links active state */
+/* body[data-theme="light"] .nav-link.active {
+  background: rgba(37, 99, 235, 0.14);
+  border: 1px solid rgba(37, 99, 235, 0.18);
+} */
+
+/* Badge style */
+body[data-theme="light"] .badge {
+  border: 1px solid #e6eaf2;
+}

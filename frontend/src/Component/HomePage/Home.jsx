@@ -662,8 +662,6 @@ const deleteStudent = async (id) => {
               </div>
             </section>
           )}
-
-          <div className="footerNote">✅ Professional UI Dashboard Ready for Presentation</div>
         </main>
       </div>
     </div>

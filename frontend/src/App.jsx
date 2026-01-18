@@ -1,12 +1,10 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useEffect, useState } from "react";
-
-
-
 import Recommendations from "./pages/Recommendations";
 import Profile from "./Pages/Profile";
 import Navbar from "./Component/Navbar/Navbar";
 import Home from "./Component/HomePage/Home";
+import About from "./Pages/About";
 
 
 export default function App() {
@@ -29,7 +27,9 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/recommendations" element={<Recommendations />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route path="/profile/:id" element={<Profile />} />
+        <Route path="/about" element={<About/>} />
+
       </Routes>
     </BrowserRouter>
   );

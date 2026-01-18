@@ -763,3 +763,237 @@ body[data-theme="light"] .cardIcon {
   border-color: rgba(239, 68, 68, 0.65);
   color: #fecaca;
 }
+/* ================================
+   SMOOTH UI EFFECTS (GLOBAL)
+================================ */
+.card,
+.panel,
+.sidebar,
+.main,
+.table,
+.btn,
+.iconBtn {
+  transition: all 0.25s ease;
+}
+
+/* ================================
+   PREMIUM CARD LOOK
+================================ */
+.card {
+  position: relative;
+  overflow: hidden;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(37, 99, 235, 0.35);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.42);
+}
+
+/* Shine effect */
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255, 255, 255, 0.10),
+    transparent
+  );
+  transform: translateX(-120%);
+  transition: 0.65s;
+}
+
+.card:hover::before {
+  transform: translateX(120%);
+}
+
+/* Card icons */
+.cardIcon {
+  transition: 0.25s;
+}
+.card:hover .cardIcon {
+  transform: scale(1.08);
+  background: rgba(37, 99, 235, 0.18);
+  border-color: rgba(37, 99, 235, 0.4);
+}
+
+/* ================================
+   PANEL SMOOTH EFFECT
+================================ */
+.panel:hover {
+  transform: translateY(-4px);
+  border-color: rgba(37, 99, 235, 0.3);
+}
+
+/* ================================
+   RESPONSIVE FIX
+================================ */
+
+/* Tablet */
+@media (max-width: 1050px) {
+  .cards {
+    grid-template-columns: 1fr !important;
+  }
+
+  .grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .chartBox {
+    height: 260px !important;
+  }
+}
+
+/* Mobile */
+@media (max-width: 880px) {
+  .layout {
+    flex-direction: column !important;
+    height: auto !important;
+  }
+
+  .sidebar {
+    width: 100% !important;
+    height: auto !important;
+    border-right: none !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .main {
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .cards {
+    gap: 12px !important;
+  }
+
+  .card {
+    padding: 14px !important;
+  }
+
+  .panel {
+    padding: 14px !important;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 520px) {
+  .cardValue {
+    font-size: 18px !important;
+  }
+
+  .cardHint {
+    font-size: 11px !important;
+  }
+
+  .panelHead h3 {
+    font-size: 13px !important;
+  }
+
+  .panelHead p {
+    font-size: 11px !important;
+  }
+
+  .chartBox {
+    height: 220px !important;
+  }
+}
+
+
+/* =====================================
+   ✅ SCROLL FIX (IMPORTANT)
+===================================== */
+html,
+body {
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  /* overflow-y: auto;   ✅ allow scroll */
+}
+
+.app {
+  min-height: 100vh;
+  width: 100%;
+  overflow: visible;
+}
+
+/* layout scroll fix */
+.layout {
+  flex: 1;
+  display: flex;
+  min-height: calc(100vh - 70px);
+  overflow: visible;
+}
+
+/* ✅ Make main scrollable in desktop */
+.main {
+  flex: 1;
+  padding: 18px;
+  overflow-y: auto;
+  min-height: calc(100vh - 70px);
+}
+
+/* ✅ Sidebar scroll in desktop */
+.sidebar {
+  width: 340px;
+  padding: 18px;
+  overflow-y: auto;
+  max-height: calc(100vh - 70px);
+}
+
+/* =====================================
+   ✅ RESPONSIVE FIX (MOBILE)
+===================================== */
+@media (max-width: 880px) {
+  .layout {
+    flex-direction: column;
+    height: auto;
+  }
+
+  /* ✅ Sidebar becomes normal block */
+  .sidebar {
+    width: 100%;
+    max-height: unset;
+    height: auto;
+    overflow: visible;
+  }
+
+  /* ✅ Main also normal block */
+  .main {
+    min-height: auto;
+    height: auto;
+    overflow: visible;
+  }
+
+  /* cards responsive */
+  .cards {
+    grid-template-columns: 1fr;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ✅ Small screen better spacing */
+@media (max-width: 520px) {
+  .sidebar,
+  .main {
+    padding: 14px;
+  }
+
+  input,
+  select {
+    padding: 10px;
+    border-radius: 12px;
+  }
+
+  .btn {
+    padding: 11px;
+    font-size: 14px;
+  }
+}
+
+

@@ -66,3 +66,135 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+
+/* ============================= */
+/* ✅ GLOBAL LIGHT THEME COLORS  */
+/* ============================= */
+
+body[data-theme="light"] {
+  background: #f6f8fc;
+  color: #0f172a;
+}
+
+/* Page containers background */
+body[data-theme="light"] .app,
+body[data-theme="light"] .main,
+body[data-theme="light"] .recPage,
+body[data-theme="light"] .profilePage,
+body[data-theme="light"] .aboutPage {
+  background: #f6f8fc;
+  color: #0f172a;
+}
+
+/* ✅ Cards / Panels / Boxes */
+body[data-theme="light"] .card,
+body[data-theme="light"] .panel,
+body[data-theme="light"] .statBox,
+body[data-theme="light"] .recLeft,
+body[data-theme="light"] .recBox,
+body[data-theme="light"] .planBox,
+body[data-theme="light"] .studentCard,
+body[data-theme="light"] .weakBox,
+body[data-theme="light"] .profileCard {
+  background: #ffffff !important;
+  border: 1px solid #e6eaf2 !important;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.06) !important;
+}
+
+/* ✅ Inputs / Selects */
+body[data-theme="light"] input,
+body[data-theme="light"] select,
+body[data-theme="light"] textarea {
+  background: #f6f8fc !important;
+  color: #0f172a !important;
+  border: 1px solid #d9e0ef !important;
+}
+
+body[data-theme="light"] input::placeholder {
+  color: #64748b;
+}
+
+/* ✅ Labels & SubText */
+body[data-theme="light"] label,
+body[data-theme="light"] .cardHint,
+body[data-theme="light"] .recTop p,
+body[data-theme="light"] .recSub,
+body[data-theme="light"] .planItem span,
+body[data-theme="light"] .weakBox ul {
+  color: #64748b !important;
+}
+
+/* ✅ Table */
+body[data-theme="light"] table {
+  background: #ffffff !important;
+  border: 1px solid #e6eaf2 !important;
+}
+
+body[data-theme="light"] th {
+  background: #f1f5ff !important;
+  color: #0f172a !important;
+}
+
+body[data-theme="light"] td {
+  color: #0f172a !important;
+  border-bottom: 1px solid #e6eaf2 !important;
+}
+
+/* ✅ Navbar */
+body[data-theme="light"] .navbar {
+  background: #ffffff !important;
+  border-bottom: 1px solid #e6eaf2 !important;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
+}
+
+body[data-theme="light"] .nav-link {
+  color: #0f172a !important;
+}
+
+body[data-theme="light"] .nav-link.active {
+  background: #eef2ff !important;
+  color: #2563eb !important;
+}
+
+/* ✅ Buttons */
+body[data-theme="light"] .btn.primary {
+  background: linear-gradient(135deg, #2563eb, #9333ea) !important;
+  color: white !important;
+}
+
+body[data-theme="light"] .btn.success {
+  background: linear-gradient(135deg, #22c55e, #16a34a) !important;
+  color: white !important;
+}
+
+body[data-theme="light"] .copyBtn,
+body[data-theme="light"] .exportBtn {
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+}
+
+/* ✅ Badge colors */
+body[data-theme="light"] .b-excellent {
+  background: #dcfce7 !important;
+  color: #166534 !important;
+}
+body[data-theme="light"] .b-good {
+  background: #dbeafe !important;
+  color: #1e40af !important;
+}
+body[data-theme="light"] .b-average {
+  background: #ffedd5 !important;
+  color: #9a3412 !important;
+}
+body[data-theme="light"] .b-poor {
+  background: #fee2e2 !important;
+  color: #991b1b !important;
+}
+
+/* ✅ Scrollbars */
+body[data-theme="light"] ::-webkit-scrollbar-thumb {
+  background: rgba(15, 23, 42, 0.25);
+}
+body[data-theme="light"] ::-webkit-scrollbar-thumb:hover {
+  background: rgba(15, 23, 42, 0.4);
+}

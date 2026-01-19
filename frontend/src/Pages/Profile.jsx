@@ -16,7 +16,8 @@ import {
   TrendingUp,
 } from "lucide-react";
 
-const API = "http://127.0.0.1:8000";
+const API = "https://student-performance-backend-xgvt.onrender.com";
+
 
 export default function Profile() {
   const { id } = useParams();

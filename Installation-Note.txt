@@ -3,8 +3,9 @@ Terminal commands-:
 --------------------------------------------Backend-----------------------------------------------
 ---->  cd ./backend
 
-          1>  Run Backend -->   uvicorn main:app --reload
+        01>.  One time command ---->              python -m pip install fastapi uvicorn python-dotenv pymongo
 
+         Every time >     Run Backend -->         python -m uvicorn main:app --reload
 
 
 --------------------------------------------Frontend----------------------------------------------

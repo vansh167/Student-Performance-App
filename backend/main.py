@@ -9,18 +9,18 @@ import csv
 
 app = FastAPI()
 
-# ✅ FIXED CORS (LOCAL + RENDER FRONTEND)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:5173",
         "http://127.0.0.1:5173",
-        "https://student-performance-frontend.onrender.com" 
+        "https://student-performance-app-4j75.onrender.com"
     ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 
 # -------------------- MODELS --------------------

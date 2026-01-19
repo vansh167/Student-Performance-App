@@ -1,10 +1,11 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useEffect, useState } from "react";
-import Recommendations from "./pages/Recommendations";
-import Profile from "./Pages/Profile";
-import Navbar from "./Component/Navbar/Navbar";
-import Home from "./Component/HomePage/Home";
-import About from "./Pages/About";
+// Correct
+import Recommendations from "./Pages/Recommendations.jsx";
+import Profile from "./Pages/Profile.jsx";
+import Navbar from "./Component/Navbar/Navbar.jsx";
+import Home from "./Component/HomePage/Home.jsx";
+import About from "./Pages/About.jsx";
 
 
 export default function App() {

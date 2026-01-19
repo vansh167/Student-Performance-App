@@ -9,14 +9,21 @@ import csv
 
 app = FastAPI()
 
+# ✅ FIXED CORS (LOCAL + RENDER FRONTEND)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+    allow_origins=[
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "https://student-performance-frontend.onrender.com" 
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+
+# -------------------- MODELS --------------------
 
 class Student(BaseModel):
     name: str
@@ -29,6 +36,8 @@ class Student(BaseModel):
     motivation: str
     extracurricular: str
 
+
+# -------------------- LOGIC --------------------
 
 def predict_logic(data: Student):
     score = (
@@ -55,13 +64,14 @@ def predict_logic(data: Student):
     return score, category
 
 
-#  Safe ObjectId converter
 def safe_object_id(student_id: str):
     try:
         return ObjectId(student_id)
     except Exception:
         raise HTTPException(status_code=400, detail="Invalid student id")
 
+
+# -------------------- ROUTES --------------------
 
 @app.post("/predict")
 def predict(student: Student):
@@ -79,7 +89,11 @@ def save_student(student: Student):
 
     students_collection.insert_one(record)
 
-    return {"message": "Student saved successfully!", "score": score, "category": category}
+    return {
+        "message": "Student saved successfully!",
+        "score": score,
+        "category": category
+    }
 
 
 @app.get("/students")
@@ -128,7 +142,11 @@ def update_student(student_id: str, student: Student):
     if res.matched_count == 0:
         raise HTTPException(status_code=404, detail="Student not found")
 
-    return {"message": "Student updated successfully!", "score": score, "category": category}
+    return {
+        "message": "Student updated successfully!",
+        "score": score,
+        "category": category
+    }
 
 
 @app.get("/recommendations/{student_id}")
@@ -236,9 +254,17 @@ def export_csv():
 
     for s in students:
         writer.writerow([
-            s.get("name"), s.get("gender"), s.get("score"), s.get("category"),
-            s.get("attendance"), s.get("study_time"), s.get("sleep_hours"), s.get("previous_grade"),
-            s.get("family_support"), s.get("motivation"), s.get("extracurricular")
+            s.get("name"),
+            s.get("gender"),
+            s.get("score"),
+            s.get("category"),
+            s.get("attendance"),
+            s.get("study_time"),
+            s.get("sleep_hours"),
+            s.get("previous_grade"),
+            s.get("family_support"),
+            s.get("motivation"),
+            s.get("extracurricular")
         ])
 
     output.seek(0)

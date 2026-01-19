@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useMemo, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import "../styling/Profile.css";
+import "../Styling/Profile.css";
 
 import {
   ArrowLeft,

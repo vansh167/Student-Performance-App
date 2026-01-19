@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useMemo, useState } from "react";
-import "../styling/Recommendations.css";
+import "../Styling/Recommendations.css";
 import { Download, FileSpreadsheet } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 

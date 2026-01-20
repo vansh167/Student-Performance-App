@@ -5,7 +5,10 @@ from pydantic import BaseModel
 from database import students_collection
 from bson import ObjectId
 from io import StringIO
+from database import users_collection
+from auth import create_token
 import csv
+import bcrypt
 
 app = FastAPI()
 
@@ -35,6 +38,14 @@ class Student(BaseModel):
     family_support: str
     motivation: str
     extracurricular: str
+class SignupModel(BaseModel):
+    name: str
+    email: str
+    password: str
+
+class LoginModel(BaseModel):
+    email: str
+    password: str
 
 
 # -------------------- LOGIC --------------------
@@ -274,3 +285,42 @@ def export_csv():
         media_type="text/csv",
         headers={"Content-Disposition": "attachment; filename=students.csv"}
     )
+
+@app.post("/signup")
+def signup(data: SignupModel):
+    user = users_collection.find_one({"email": data.email})
+    if user:
+        raise HTTPException(status_code=400, detail="Email already registered")
+
+    hashed_pw = bcrypt.hashpw(data.password.encode("utf-8"), bcrypt.gensalt())
+
+    users_collection.insert_one({
+        "name": data.name,
+        "email": data.email,
+        "password": hashed_pw.decode("utf-8")
+    })
+
+    return {"message": "Signup successful"}
+
+
+@app.post("/login")
+def login(data: LoginModel):
+    user = users_collection.find_one({"email": data.email})
+    if not user:
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+
+    if not bcrypt.checkpw(data.password.encode("utf-8"), user["password"].encode("utf-8")):
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+
+    token = create_token(str(user["_id"]))
+
+    return {
+        "message": "Login successful",
+        "token": token,
+        "user": {
+            "id": str(user["_id"]),
+            "name": user["name"],
+            "email": user["email"]
+        }
+    }
+

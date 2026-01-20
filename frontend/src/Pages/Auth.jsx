@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { BookOpen, UserPlus, LogIn } from "lucide-react";
 import "../Styling/Auth.css";
@@ -39,6 +39,10 @@ export default function Auth() {
       alert(err.response?.data?.detail || "Something went wrong!");
     }
   };
+useEffect(() => {
+  const token = localStorage.getItem("token");
+  if (token) navigate("/");
+}, []);
 
   return (
     <div className="authWrap">

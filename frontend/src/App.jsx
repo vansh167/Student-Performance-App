@@ -32,7 +32,7 @@ export default function App() {
         <Route path="/recommendations" element={<Recommendations />} />
         <Route path="/profile/:id" element={<Profile />} />
         <Route path="/about" element={<About/>} />
-        <Route path="/about" element={<Auth/>} />
+        <Route path="/auth" element={<Auth/>} />
       </Routes>
     </BrowserRouter>
   );

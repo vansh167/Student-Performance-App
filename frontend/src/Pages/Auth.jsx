@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { BookOpen, UserPlus, LogIn } from "lucide-react";
-import "./Auth.css";
+import "../Styling/Auth.css";
 
 const API = "https://student-performance-app-4j75.onrender.com"; 
 // local: http://127.0.0.1:8000

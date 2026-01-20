@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useMemo, useState } from "react";
 import "../Styling/Recommendations.css";
-import { Download, FileSpreadsheet } from "lucide-react";
+import { FileSpreadsheet } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 import {
@@ -14,13 +14,11 @@ import {
   Clock3,
   BookOpenCheck,
   TrendingUp,
-  // ClipboardCopy,
   Users,
   BarChart3,
 } from "lucide-react";
 
 const API = "https://student-performance-backend-xgvt.onrender.com";
-
 
 const ICONS = {
   ShieldCheck: <ShieldCheck size={18} />,
@@ -41,19 +39,30 @@ export default function Recommendations() {
   const [sort, setSort] = useState("high");
 
   const [analysis, setAnalysis] = useState(null);
-  // const [copied, setCopied] = useState(false);
-const navigate = useNavigate();
+
+  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+
+  const authHeader = {
+    headers: { Authorization: `Bearer ${token}` },
+  };
 
   const fetchStudents = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(`${API}/students`);
+      const res = await axios.get(`${API}/students`, authHeader);
       const list = res.data || [];
       setStudents(list);
 
       if (list.length > 0) setSelectedId(list[0]._id);
     } catch (err) {
       console.log(err);
+
+      if (err?.response?.status === 401) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        navigate("/login");
+      }
     } finally {
       setLoading(false);
     }
@@ -61,15 +70,25 @@ const navigate = useNavigate();
 
   const fetchAnalysis = async (id) => {
     try {
-      const res = await axios.get(`${API}/recommendations/${id}`);
+      const res = await axios.get(`${API}/recommendations/${id}`, authHeader);
       setAnalysis(res.data);
     } catch (err) {
       console.log(err);
       setAnalysis(null);
+
+      if (err?.response?.status === 401) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        navigate("/login");
+      }
     }
   };
 
   useEffect(() => {
+    if (!token) {
+      navigate("/login");
+      return;
+    }
     fetchStudents();
   }, []);
 
@@ -114,36 +133,9 @@ const navigate = useNavigate();
     return "recBadge b-poor";
   };
 
-//   const copyRecommendations = async () => {
-//     if (!analysis?.student) return;
-
-//     const s = analysis.student;
-
-//     const text = `
-// Student: ${s.name}
-// Score: ${s.score}/100
-// Category: ${s.category}
-
-// Weakness:
-// ${analysis.weaknesses.map((w) => `- ${w}`).join("\n")}
-
-// Recommendations:
-// ${analysis.recommendations.map((r) => `- ${r.title}: ${r.desc}`).join("\n")}
-//     `.trim();
-
-//     await navigator.clipboard.writeText(text);
-//     setCopied(true);
-//     setTimeout(() => setCopied(false), 1500);
-//   };
-
-
   const exportCSV = () => {
-  window.open(`${API}/export/csv`, "_blank");
-};
-
-const exportPDF = () => {
-  window.open(`${API}/export/pdf`, "_blank");
-};
+    window.open(`${API}/export/csv?token=${token}`, "_blank");
+  };
 
   return (
     <div className="recPage">
@@ -197,11 +189,9 @@ const exportPDF = () => {
             </select>
 
             <button className="exportBtn csv" onClick={exportCSV}>
-  <FileSpreadsheet size={16} />
-  Export CSV
-</button>
-
-
+              <FileSpreadsheet size={16} />
+              Export CSV
+            </button>
           </div>
 
           <div className="tool">
@@ -213,17 +203,11 @@ const exportPDF = () => {
           </div>
 
           <button
-  className="profileBtn"
-  onClick={() => selectedId && navigate(`/profile/${selectedId}`)}
->
-  View Profile
-</button>
-
-{/* <button className="copyBtn" onClick={copyRecommendations}>
-  <ClipboardCopy size={16} />
-  {copied ? "Copied ✅" : "Copy Plan"}
-</button> */}
-
+            className="profileBtn"
+            onClick={() => selectedId && navigate(`/profile/${selectedId}`)}
+          >
+            View Profile
+          </button>
         </div>
       </div>
 

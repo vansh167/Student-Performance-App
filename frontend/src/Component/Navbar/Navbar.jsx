@@ -25,7 +25,16 @@ export default function Navbar({ theme, setTheme }) {
   const closeMenu = () => setOpen(false);
   const navigate = useNavigate();
 
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = (() => {
+  try {
+    return JSON.parse(localStorage.getItem("user") || "null");
+  } catch {
+    return null;
+  }
+})();
+
+
+  
   const dropdownRef = useRef(null);
 
   const navClass = ({ isActive }) =>

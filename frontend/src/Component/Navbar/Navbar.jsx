@@ -26,15 +26,13 @@ export default function Navbar({ theme, setTheme }) {
   const navigate = useNavigate();
 
   const user = (() => {
-  try {
-    return JSON.parse(localStorage.getItem("user") || "null");
-  } catch {
-    return null;
-  }
-})();
+    try {
+      return JSON.parse(localStorage.getItem("user") || "null");
+    } catch {
+      return null;
+    }
+  })();
 
-
-  
   const dropdownRef = useRef(null);
 
   const navClass = ({ isActive }) =>
@@ -45,6 +43,14 @@ export default function Navbar({ theme, setTheme }) {
     localStorage.removeItem("token");
     setDropOpen(false);
     navigate("/login");
+  };
+
+  const goHome = (e) => {
+    if (!user) {
+      e.preventDefault();
+      navigate("/login");
+    }
+    closeMenu();
   };
 
   useEffect(() => {
@@ -59,7 +65,7 @@ export default function Navbar({ theme, setTheme }) {
 
   return (
     <nav className="navbar">
-      <Link to="/" className="nav-logo" onClick={closeMenu}>
+      <Link to="/" className="nav-logo" onClick={goHome}>
         <BookOpen size={30} color="#e9bc49ff" />
         <div className="brandText">
           <p className="nav-title">Student Performance</p>

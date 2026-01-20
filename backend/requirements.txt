@@ -2,3 +2,8 @@ fastapi
 uvicorn
 pymongo
 python-dotenv
+python-jose
+bcrypt
+email-validator
+dnspython
+python-multipart

@@ -6,6 +6,8 @@ import Profile from "./Pages/Profile.jsx";
 import Navbar from "./Component/Navbar/Navbar.jsx";
 import Home from "./Component/HomePage/Home.jsx";
 import About from "./Pages/About.jsx";
+import About from "./Pages/Auth.jsx";
+
 
 
 export default function App() {
@@ -30,7 +32,7 @@ export default function App() {
         <Route path="/recommendations" element={<Recommendations />} />
         <Route path="/profile/:id" element={<Profile />} />
         <Route path="/about" element={<About/>} />
-
+        <Route path="/about" element={<Auth/>} />
       </Routes>
     </BrowserRouter>
   );

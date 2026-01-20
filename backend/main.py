@@ -1,14 +1,15 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
-from database import students_collection
 from bson import ObjectId
 from io import StringIO
-from database import users_collection
-from auth import create_token
 import csv
 import bcrypt
+
+from database import students_collection, users_collection
+from auth import create_token, get_current_user_id
+
 
 app = FastAPI()
 
@@ -25,9 +26,6 @@ app.add_middleware(
 )
 
 
-
-# -------------------- MODELS --------------------
-
 class Student(BaseModel):
     name: str
     gender: str
@@ -38,17 +36,18 @@ class Student(BaseModel):
     family_support: str
     motivation: str
     extracurricular: str
+
+
 class SignupModel(BaseModel):
     name: str
     email: str
     password: str
 
+
 class LoginModel(BaseModel):
     email: str
     password: str
 
-
-# -------------------- LOGIC --------------------
 
 def predict_logic(data: Student):
     score = (
@@ -82,8 +81,6 @@ def safe_object_id(student_id: str):
         raise HTTPException(status_code=400, detail="Invalid student id")
 
 
-# -------------------- ROUTES --------------------
-
 @app.post("/predict")
 def predict(student: Student):
     score, category = predict_logic(student)
@@ -91,12 +88,13 @@ def predict(student: Student):
 
 
 @app.post("/save")
-def save_student(student: Student):
+def save_student(student: Student, user_id: str = Depends(get_current_user_id)):
     score, category = predict_logic(student)
 
     record = student.dict()
     record["score"] = score
     record["category"] = category
+    record["user_id"] = user_id
 
     students_collection.insert_one(record)
 
@@ -108,19 +106,19 @@ def save_student(student: Student):
 
 
 @app.get("/students")
-def get_students():
+def get_students(user_id: str = Depends(get_current_user_id)):
     data = []
-    for s in students_collection.find():
+    for s in students_collection.find({"user_id": user_id}):
         s["_id"] = str(s["_id"])
         data.append(s)
     return data
 
 
 @app.get("/students/{student_id}")
-def get_student(student_id: str):
+def get_student(student_id: str, user_id: str = Depends(get_current_user_id)):
     oid = safe_object_id(student_id)
 
-    student = students_collection.find_one({"_id": oid})
+    student = students_collection.find_one({"_id": oid, "user_id": user_id})
     if not student:
         raise HTTPException(status_code=404, detail="Student not found")
 
@@ -129,10 +127,10 @@ def get_student(student_id: str):
 
 
 @app.delete("/students/{student_id}")
-def delete_student(student_id: str):
+def delete_student(student_id: str, user_id: str = Depends(get_current_user_id)):
     oid = safe_object_id(student_id)
 
-    res = students_collection.delete_one({"_id": oid})
+    res = students_collection.delete_one({"_id": oid, "user_id": user_id})
     if res.deleted_count == 0:
         raise HTTPException(status_code=404, detail="Student not found")
 
@@ -140,7 +138,7 @@ def delete_student(student_id: str):
 
 
 @app.put("/students/{student_id}")
-def update_student(student_id: str, student: Student):
+def update_student(student_id: str, student: Student, user_id: str = Depends(get_current_user_id)):
     oid = safe_object_id(student_id)
 
     score, category = predict_logic(student)
@@ -149,7 +147,11 @@ def update_student(student_id: str, student: Student):
     record["score"] = score
     record["category"] = category
 
-    res = students_collection.update_one({"_id": oid}, {"$set": record})
+    res = students_collection.update_one(
+        {"_id": oid, "user_id": user_id},
+        {"$set": record}
+    )
+
     if res.matched_count == 0:
         raise HTTPException(status_code=404, detail="Student not found")
 
@@ -161,10 +163,10 @@ def update_student(student_id: str, student: Student):
 
 
 @app.get("/recommendations/{student_id}")
-def get_recommendations(student_id: str):
+def get_recommendations(student_id: str, user_id: str = Depends(get_current_user_id)):
     oid = safe_object_id(student_id)
 
-    student = students_collection.find_one({"_id": oid})
+    student = students_collection.find_one({"_id": oid, "user_id": user_id})
     if not student:
         raise HTTPException(status_code=404, detail="Student not found")
 
@@ -175,11 +177,16 @@ def get_recommendations(student_id: str):
     motivation = str(student.get("motivation", "Medium"))
 
     weaknesses = []
-    if attendance < 75: weaknesses.append("Low Attendance")
-    if sleep_hours < 6: weaknesses.append("Poor Sleep")
-    if study_time < 6: weaknesses.append("Low Study Time")
-    if previous_grade < 60: weaknesses.append("Weak Academics")
-    if motivation.lower() == "low": weaknesses.append("Low Motivation")
+    if attendance < 75:
+        weaknesses.append("Low Attendance")
+    if sleep_hours < 6:
+        weaknesses.append("Poor Sleep")
+    if study_time < 6:
+        weaknesses.append("Low Study Time")
+    if previous_grade < 60:
+        weaknesses.append("Weak Academics")
+    if motivation.lower() == "low":
+        weaknesses.append("Low Motivation")
 
     if not weaknesses:
         weaknesses = ["No major weakness detected"]
@@ -251,8 +258,8 @@ def get_recommendations(student_id: str):
 
 
 @app.get("/export/csv")
-def export_csv():
-    students = list(students_collection.find())
+def export_csv(user_id: str = Depends(get_current_user_id)):
+    students = list(students_collection.find({"user_id": user_id}))
 
     output = StringIO()
     writer = csv.writer(output)
@@ -285,6 +292,7 @@ def export_csv():
         media_type="text/csv",
         headers={"Content-Disposition": "attachment; filename=students.csv"}
     )
+
 
 @app.post("/signup")
 def signup(data: SignupModel):
@@ -323,4 +331,3 @@ def login(data: LoginModel):
             "email": user["email"]
         }
     }
-

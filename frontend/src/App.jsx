@@ -33,6 +33,8 @@ export default function App() {
         <Route path="/profile/:id" element={<Profile />} />
         <Route path="/about" element={<About/>} />
         <Route path="/auth" element={<Auth/>} />
+        <Route path="/login" element={<AuthPage />} />
+        <Route path="/signup" element={<AuthPage />} />
       </Routes>
     </BrowserRouter>
   );

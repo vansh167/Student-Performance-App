@@ -6,7 +6,7 @@ import Profile from "./Pages/Profile.jsx";
 import Navbar from "./Component/Navbar/Navbar.jsx";
 import Home from "./Component/HomePage/Home.jsx";
 import About from "./Pages/About.jsx";
-import About from "./Pages/Auth.jsx";
+import Auth from "./Pages/Auth.jsx";
 
 
 

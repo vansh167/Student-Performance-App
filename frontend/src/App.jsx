@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import Recommendations from "./Pages/Recommendations.jsx";
@@ -6,9 +6,33 @@ import Profile from "./Pages/Profile.jsx";
 import Navbar from "./Component/Navbar/Navbar.jsx";
 import Home from "./Component/HomePage/Home.jsx";
 import About from "./Pages/About.jsx";
-import Auth from "./Pages/Auth.jsx";
+import Signup from "./Pages/Signup.jsx";
+import Login from "./Pages/Login.jsx";
+import Ranking from "./Pages/Ranking.jsx";
+import Welcome from "./Pages/Welcome.jsx";
+import StudentAnalytics from "./Pages/StudentAnalytics.jsx";
+import AdminPanel from "./Pages/AdminPanel.jsx";
 
-import ProtectedRoute from "./ProtectedRoute.jsx";
+
+function PrivateRoute({ children }) {
+  const token = localStorage.getItem("token");
+  return token ? children : <Navigate to="/login" replace />;
+}
+
+// ✅ Navbar show/hide controller
+function Layout({ theme, setTheme, children }) {
+  const location = useLocation();
+
+  const hideNavbarRoutes = ["/", "/welcome", "/login", "/signup"];
+  const hideNavbar = hideNavbarRoutes.includes(location.pathname);
+
+  return (
+    <>
+      {!hideNavbar && <Navbar theme={theme} setTheme={setTheme} />}
+      {children}
+    </>
+  );
+}
 
 export default function App() {
   const [theme, setTheme] = useState("dark");
@@ -25,42 +49,56 @@ export default function App() {
 
   return (
     <BrowserRouter>
-      <Navbar theme={theme} setTheme={setTheme} />
+      <Layout theme={theme} setTheme={setTheme}>
+        <Routes>
+          {/* ✅ FIRST PAGE = Welcome */}
+          <Route path="/" element={<Welcome />} />
 
-      <Routes>
-        <Route path="/about" element={<About />} />
+          {/* optional: if you still want /welcome route */}
+          <Route path="/welcome" element={<Welcome />} />
 
-        <Route path="/auth" element={<Auth />} />
-        <Route path="/login" element={<Auth />} />
-        <Route path="/signup" element={<Auth />} />
+          {/* Auth */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
 
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute>
-              <Home />
-            </ProtectedRoute>
-          }
-        />
+          {/* Protected pages */}
+          <Route
+            path="/home"
+            element={
+              <PrivateRoute>
+                <Home />
+              </PrivateRoute>
+            }
+          />
 
-        <Route
-          path="/recommendations"
-          element={
-            <ProtectedRoute>
-              <Recommendations />
-            </ProtectedRoute>
-          }
-        />
+          <Route
+            path="/recommendations"
+            element={
+              <PrivateRoute>
+                <Recommendations />
+              </PrivateRoute>
+            }
+          />
+<Route path="/admin" element={<AdminPanel/>} />
+          <Route
+            path="/profile/:id"
+            element={
+              <PrivateRoute>
+                <Profile />
+              </PrivateRoute>
+            }
+          />
 
-        <Route
-          path="/profile/:id"
-          element={
-            <ProtectedRoute>
-              <Profile />
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
+          <Route path="/student/:id" element={<Profile />} />
+          <Route path="/ranking" element={<Ranking />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/analytics" element={<StudentAnalytics/>} />
+
+
+          {/* fallback */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </Layout>
     </BrowserRouter>
   );
 }

@@ -57,16 +57,19 @@ export default function Home() {
   };
 
   const authHeader = {
-    headers: { Authorization: `Bearer ${token}` },
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   };
 
+  // ✅ FIX: backend already returns only logged-in user records
   const fetchStudents = async () => {
     try {
       const res = await axios.get(`${API}/students`, authHeader);
       setStudents(res.data || []);
     } catch (err) {
       console.log(err);
-      if (err?.response?.status === 401) {
+      if (err.response?.status === 401) {
         localStorage.removeItem("token");
         localStorage.removeItem("user");
         window.location.href = "/login";
@@ -77,9 +80,10 @@ export default function Home() {
   useEffect(() => {
     if (!token) {
       window.location.href = "/login";
-      return;
+    } else {
+      fetchStudents();
     }
-    fetchStudents();
+    // eslint-disable-next-line
   }, []);
 
   const validateName = () => {
@@ -122,7 +126,13 @@ export default function Home() {
       await fetchStudents();
     } catch (err) {
       console.log(err);
-      alert("Save failed! Check backend & token.");
+      if (err.response?.status === 401) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        window.location.href = "/login";
+        return;
+      }
+      alert("Save failed! Check backend & MongoDB connection.");
     } finally {
       setSaving(false);
     }
@@ -134,6 +144,12 @@ export default function Home() {
       await fetchStudents();
     } catch (err) {
       console.log(err);
+      if (err.response?.status === 401) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        window.location.href = "/login";
+        return;
+      }
       alert("Delete failed!");
     }
   };
@@ -174,6 +190,12 @@ export default function Home() {
       await fetchStudents();
     } catch (err) {
       console.log(err);
+      if (err.response?.status === 401) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        window.location.href = "/login";
+        return;
+      }
       alert("Update failed!");
     }
   };
@@ -228,7 +250,10 @@ export default function Home() {
                   <input
                     value={editForm.name}
                     onChange={(e) =>
-                      setEditForm((prev) => ({ ...prev, name: e.target.value }))
+                      setEditForm((prev) => ({
+                        ...prev,
+                        name: e.target.value,
+                      }))
                     }
                   />
                 </div>
@@ -489,18 +514,197 @@ export default function Home() {
               {loading ? "Predicting..." : "Predict Score"}
             </button>
 
-            <button
-              className="btn success"
-              onClick={saveRecord}
-              disabled={saving}
-            >
+            <button className="btn success" onClick={saveRecord} disabled={saving}>
               <Save size={18} />
               {saving ? "Saving..." : "Save Record"}
             </button>
           </div>
         </aside>
 
-        <main className="main">{/* your main code is same */}</main>
+        <main className="main">
+          <div className="cards">
+            <div className="card cardStudent">
+              <div className="cardTop">
+                <div className="cardIcon">
+                  <GraduationCap size={18} />
+                </div>
+                <p className="cardTitle">Student</p>
+              </div>
+              <h2 className="cardValue">{form.name}</h2>
+              <p className="cardHint">Current input profile</p>
+            </div>
+
+            <div className="card cardScore">
+              <div className="cardTop">
+                <div className="cardIcon">
+                  <BarChart3 size={18} />
+                </div>
+                <p className="cardTitle">Predicted Score</p>
+              </div>
+              <h2 className="cardValue">
+                {result ? result.score : "--"} <span className="small">/100</span>
+              </h2>
+              <p className="cardHint">Rule-based result</p>
+            </div>
+
+            <div className="card cardCategory">
+              <div className="cardTop">
+                <div className="cardIcon">
+                  <Trophy size={18} />
+                </div>
+                <p className="cardTitle">Category</p>
+              </div>
+              <h2 className="cardValue">
+                {result ? (
+                  <span className={badge(result.category)}>{result.category}</span>
+                ) : (
+                  "--"
+                )}
+              </h2>
+              <p className="cardHint">Performance level</p>
+            </div>
+          </div>
+
+          <div className="grid">
+            <section className="panel">
+              <div className="panelHead">
+                <h3>Performance Metrics</h3>
+                <p>Study, grades, attendance and sleep</p>
+              </div>
+
+              <div className="panelBody chartBox">
+                <ResponsiveContainer>
+                  <BarChart data={metricsData}>
+                    <defs>
+                      <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#4269c6" />
+                        <stop offset="100%" stopColor="#7597d2" />
+                      </linearGradient>
+                    </defs>
+
+                    <XAxis dataKey="name" />
+                    <YAxis />
+                    <Tooltip
+                      contentStyle={{
+                        background: "white",
+                        border: "1px solid #e5e7eb",
+                        color: "black",
+                        fontWeight: "500",
+                      }}
+                      labelStyle={{ color: "black", fontWeight: "600" }}
+                      itemStyle={{ color: "black" }}
+                    />
+                    <Bar dataKey="value" fill="url(#barGradient)" radius={[6, 6, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </section>
+
+            <section className="panel">
+              <div className="panelHead">
+                <h3>Prediction Progress</h3>
+                <p>Score indicator</p>
+              </div>
+
+              <div className="panelBody">
+                <div className="progressWrap">
+                  <div className="progressTop">
+                    <span>Current Score</span>
+                    <b>{result ? result.score : 0}%</b>
+                  </div>
+
+                  <div className="progress">
+                    <div
+                      className="progressFill"
+                      style={{ width: `${result ? result.score : 0}%` }}
+                    />
+                  </div>
+
+                  <div className="tip">
+                    <b>Tip:</b> Increase study time & attendance for better score.
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <section className="panel tablePanel">
+            <div className="panelHead">
+              <h3>Saved Students Records</h3>
+              <p>Total Records: {students.length}</p>
+            </div>
+
+            <div className="panelBody">
+              {students.length === 0 ? (
+                <p className="empty">No records saved yet. Predict & save student.</p>
+              ) : (
+                <div className="tableWrap">
+                  <table className="table">
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Score</th>
+                        <th>Category</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {students.map((s, idx) => {
+                        const name = s.Name || s.name;
+                        const score = s.Score ?? s.score;
+                        const category = s.Category || s.category;
+
+                        return (
+                          <tr key={s._id || idx}>
+                            <td>{name}</td>
+                            <td>{score}</td>
+                            <td>
+                              <span className={badge(category)}>{category}</span>
+                            </td>
+                            <td>
+                              <div className="actionCell">
+                                <button className="iconBtn editBtn" onClick={() => openEdit(s)}>
+                                  <Pencil size={16} />
+                                </button>
+
+                                <button className="iconBtn delBtn" onClick={() => deleteStudent(s._id)}>
+                                  <Trash2 size={16} />
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+          </section>
+
+          {students.length > 0 && (
+            <section className="panel">
+              <div className="panelHead">
+                <h3>Category Distribution</h3>
+                <p>Pie chart based on saved records</p>
+              </div>
+
+              <div className="panelBody chartBox">
+                <ResponsiveContainer>
+                  <PieChart>
+                    <Pie data={pieData} dataKey="value" nameKey="name" label>
+                      {pieData.map((entry, index) => (
+                        <Cell key={index} fill={pieColors[index % pieColors.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                    <Legend />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+            </section>
+          )}
+        </main>
       </div>
     </div>
   );

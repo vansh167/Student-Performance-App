@@ -1,0 +1,523 @@
+/* =========================
+   BODY
+========================= */
+.smBody {
+  margin: 0;
+  background: #070a12;
+  overflow-x: hidden;
+  font-family: Inter, system-ui, Arial, sans-serif;
+}
+
+/* =========================
+   PAGE WRAPPER
+========================= */
+.smWrap {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  position: relative;
+}
+
+/* =========================
+   BACKGROUND
+========================= */
+.smBg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: radial-gradient(
+      circle at 20% 20%,
+      rgba(96, 165, 250, 0.2),
+      transparent 45%
+    ),
+    radial-gradient(
+      circle at 80% 30%,
+      rgba(34, 197, 94, 0.16),
+      transparent 45%
+    ),
+    radial-gradient(
+      circle at 55% 85%,
+      rgba(168, 85, 247, 0.16),
+      transparent 50%
+    ),
+    linear-gradient(180deg, #05070e, #070a12);
+}
+
+/* moving grid */
+.smLines {
+  position: absolute;
+  inset: 0;
+  opacity: 0.28;
+  background-image: linear-gradient(
+      rgba(255, 255, 255, 0.06) 1px,
+      transparent 1px
+    ),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 70px 70px;
+  mask-image: radial-gradient(circle at center, black, transparent 70%);
+  animation: smMove 10s linear infinite;
+}
+
+@keyframes smMove {
+  from {
+    transform: translateY(0px);
+  }
+  to {
+    transform: translateY(70px);
+  }
+}
+
+/* glow blobs */
+.smGlow {
+  position: absolute;
+  width: 520px;
+  height: 520px;
+  border-radius: 999px;
+  filter: blur(90px);
+  opacity: 0.62;
+  animation: smFloat 8s ease-in-out infinite;
+}
+
+.smGlow.g1 {
+  left: -180px;
+  top: -180px;
+  background: rgba(96, 165, 250, 0.38);
+}
+.smGlow.g2 {
+  right: -220px;
+  top: 30%;
+  background: rgba(34, 197, 94, 0.25);
+  animation-delay: 1.4s;
+}
+.smGlow.g3 {
+  left: 25%;
+  bottom: -240px;
+  background: rgba(168, 85, 247, 0.23);
+  animation-delay: 2.6s;
+}
+
+@keyframes smFloat {
+  0% {
+    transform: translateY(0px) scale(1);
+  }
+  50% {
+    transform: translateY(-18px) scale(1.03);
+  }
+  100% {
+    transform: translateY(0px) scale(1);
+  }
+}
+
+/* optional light noise (no external url) */
+.smNoise {
+  position: absolute;
+  inset: 0;
+  opacity: 0.08;
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.1) 1px,
+    transparent 1px
+  );
+  background-size: 3px 3px;
+  pointer-events: none;
+}
+
+/* =========================
+   MAIN CONTAINER
+========================= */
+.smContainer {
+  width: 100%;
+  max-width: 1120px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  z-index: 2;
+  border-radius: 30px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow: 0 35px 90px rgba(0, 0, 0, 0.45);
+}
+
+/* =========================
+   LEFT SIDE
+========================= */
+.smLeft {
+  padding: 56px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  animation: smIn 0.6s ease;
+}
+
+@keyframes smIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}
+
+/* logo image (no box) */
+.smLogo {
+  width: 78px;
+  height: auto;
+  object-fit: contain;
+  margin-bottom: 18px;
+  filter: drop-shadow(0 12px 30px rgba(0, 0, 0, 0.45));
+}
+
+.smLeft h1 {
+  margin: 0;
+  font-size: 40px;
+  font-weight: 950;
+  letter-spacing: -0.6px;
+}
+
+.smLeft p {
+  margin-top: 14px;
+  font-size: 14px;
+  font-weight: 750;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.74);
+  max-width: 520px;
+}
+
+.smBadgeRow {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 22px;
+}
+
+.smBadge {
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.18);
+  font-size: 12px;
+  font-weight: 950;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.smMiniText {
+  margin-top: 34px;
+  font-size: 13px;
+  font-weight: 850;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.smLink {
+  color: #60a5fa;
+  font-weight: 950;
+  text-decoration: none;
+}
+
+.smLink:hover {
+  text-decoration: underline;
+}
+
+/* =========================
+   RIGHT SIDE
+========================= */
+.smRight {
+  padding: 26px;
+  display: grid;
+  place-items: center;
+}
+
+.smFormCard {
+  width: 100%;
+  max-width: 470px;
+  border-radius: 28px;
+  padding: 26px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.22);
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.35);
+  animation: smIn2 0.6s ease;
+}
+
+@keyframes smIn2 {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}
+
+.smTop h2 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 950;
+  color: white;
+}
+
+.smTop p {
+  margin-top: 10px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.62);
+  font-weight: 750;
+  line-height: 1.5;
+}
+
+.smForm {
+  margin-top: 18px;
+  display: grid;
+  gap: 16px;
+}
+
+/* =========================
+   INPUTS (NEW FIXED)
+========================= */
+.suField {
+  display: grid;
+  gap: 7px;
+}
+
+.suLabel {
+  font-size: 12px;
+  font-weight: 950;
+  color: rgba(255, 255, 255, 0.76);
+  letter-spacing: 0.2px;
+}
+
+.suInputRow {
+  height: 50px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 16px;
+  color: rgba(255, 255, 255, 0.72);
+  transition: 0.25s ease;
+}
+
+.suInputRow svg {
+  opacity: 0.85;
+}
+
+.suInputRow:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.suInputRow:focus-within {
+  border-color: rgba(96, 165, 250, 0.75);
+  box-shadow: 0 0 0 6px rgba(96, 165, 250, 0.16);
+  transform: translateY(-1px);
+}
+
+/* .suInput {
+  width: 100%;
+  height: 100%;
+  border: none;
+  outline: none;
+  background: transparent !important;
+  color: #ffffff !important;
+  font-weight: 900;
+  font-size: 14px;
+  letter-spacing: 0.2px;
+} */
+
+.suInput::placeholder {
+  color: rgba(255, 255, 255, 0.42);
+  font-weight: 750;
+}
+
+/* ✅ CHROME AUTOFILL FIX */
+.suInput:-webkit-autofill,
+.suInput:-webkit-autofill:hover,
+.suInput:-webkit-autofill:focus,
+.suInput:-webkit-autofill:active {
+  -webkit-text-fill-color: #ffffff !important;
+  transition: background-color 9999s ease-in-out 0s;
+  box-shadow: 0 0 0px 1000px rgba(0, 0, 0, 0.28) inset !important;
+  border-radius: 18px;
+}
+
+/* =========================
+   MATCH BADGE
+========================= */
+.suMatch {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 16px;
+  border: 1px dashed rgba(255, 255, 255, 0.14);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 12px;
+  font-weight: 950;
+}
+
+.suMatch.ok {
+  border: 1px solid rgba(34, 197, 94, 0.28);
+  background: rgba(34, 197, 94, 0.12);
+  color: #22c55e;
+}
+
+.suMatch.bad {
+  border: 1px solid rgba(239, 68, 68, 0.28);
+  background: rgba(239, 68, 68, 0.12);
+  color: #ef4444;
+}
+
+/* =========================
+   BUTTON
+========================= */
+.smBtn {
+  width: 100%;
+  height: 52px;
+  border-radius: 18px;
+  border: none;
+  cursor: pointer;
+  font-weight: 950;
+  color: #061021;
+  background: linear-gradient(135deg, #60a5fa, #22c55e);
+  transition: 0.22s;
+  box-shadow: 0 18px 70px rgba(34, 197, 94, 0.14);
+}
+
+.smBtn:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.06);
+}
+
+.smBtn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.smBtnLoad {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+}
+
+.smSpinner {
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  border: 3px solid rgba(0, 0, 0, 0.22);
+  border-top: 3px solid rgba(0, 0, 0, 0.75);
+  animation: smSpin 0.7s linear infinite;
+}
+
+@keyframes smSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* =========================
+   FOOTER TEXT
+========================= */
+.smFooter {
+  margin-top: 4px;
+  font-size: 12px;
+  font-weight: 750;
+  color: rgba(255, 255, 255, 0.55);
+  line-height: 1.5;
+}
+
+.smFooter span {
+  color: rgba(255, 255, 255, 0.82);
+  font-weight: 950;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 980px) {
+  .smContainer {
+    grid-template-columns: 1fr;
+  }
+
+  .smLeft {
+    padding: 44px 22px;
+  }
+
+  .smLeft h1 {
+    font-size: 32px;
+  }
+
+  .smRight {
+    padding: 18px;
+  }
+
+  .smFormCard {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 520px) {
+  .smWrap {
+    padding: 16px;
+  }
+
+  .smLeft {
+    padding: 40px 18px;
+  }
+
+  .smLeft h1 {
+    font-size: 28px;
+  }
+
+  .smFormCard {
+    padding: 20px;
+    border-radius: 22px;
+  }
+
+  .suInputRow {
+    height: 48px;
+    border-radius: 16px;
+  }
+}
+/* Already have an account section */
+.suAltAuth {
+  margin-top: 32px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-size: 13px;
+  font-weight: 850;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.suAltLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 950;
+  color: #60a5fa;
+  border: 1px solid rgba(96, 165, 250, 0.35);
+  background: rgba(96, 165, 250, 0.08);
+  transition: 0.22s ease;
+}
+
+.suAltLink:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.06);
+  box-shadow: 0 14px 50px rgba(96, 165, 250, 0.18);
+}
+
+.suArrow {
+  transition: 0.22s ease;
+}
+
+.suAltLink:hover .suArrow {
+  transform: translateX(3px);
+}

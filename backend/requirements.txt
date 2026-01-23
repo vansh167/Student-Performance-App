@@ -7,3 +7,4 @@ bcrypt
 email-validator
 dnspython
 python-multipart
+pydantic

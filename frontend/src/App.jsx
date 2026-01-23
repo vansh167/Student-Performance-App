@@ -35,9 +35,7 @@ function Layout({ theme, setTheme, children }) {
 }
 
 export default function App() {
-  const [theme, setTheme] = useState(()=>{
-  return localStorage.getItem("theme") || "dark" ;
-  });
+const theme = localStorage.getItem("theme");
 
   useEffect(() => {
     const saved = localStorage.getItem("theme");

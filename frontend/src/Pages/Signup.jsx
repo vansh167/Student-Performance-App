@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
-import "../Styling/SignupModern.css";
+import "../Styling/SignupMordern.css";
 import logo from "../assets/student.png";
 import { User, Mail, Lock, ShieldCheck } from "lucide-react";
 

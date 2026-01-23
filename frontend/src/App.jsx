@@ -5,7 +5,7 @@ import Recommendations from "./Pages/Recommendations.jsx";
 import Profile from "./Pages/Profile.jsx";
 import Navbar from "./Component/Navbar/Navbar.jsx";
 import Home from "./Component/HomePage/Home.jsx";
-import About from "./Pages/About.jsx";
+import About from "./Pages/About.jsx";  
 import Signup from "./Pages/Signup.jsx";
 import Login from "./Pages/Login.jsx";
 import Ranking from "./Pages/Ranking.jsx";
@@ -35,7 +35,9 @@ function Layout({ theme, setTheme, children }) {
 }
 
 export default function App() {
-  const [theme, setTheme] = useState("dark");
+  const [theme, setTheme] = useState(()=>{
+  return localStorage.getItem("theme") || "dark" ;
+  });
 
   useEffect(() => {
     const saved = localStorage.getItem("theme");

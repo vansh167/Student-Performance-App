@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useContext } from "react";
-import { ThemeContext } from "./context/ThemeContext.jsx";
+import { ThemeContext } from "./Context/ThemeContext.jsx";
 
 import Recommendations from "./Pages/Recommendations.jsx";
 import Profile from "./Pages/Profile.jsx";

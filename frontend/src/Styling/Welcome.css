@@ -1439,3 +1439,105 @@ body {
     grid-template-columns: 1fr;
   }
 }
+/* ===========================================
+   ✅ Welcome Navbar Mobile Fix
+   Login + Create Account Responsive
+=========================================== */
+
+/* ✅ Make topbar spacing proper */
+.topbar{
+  width: 100%;
+  padding: 18px clamp(16px, 4vw, 70px);
+}
+
+/* ✅ Prevent overflow inside header */
+.topbar *{
+  max-width: 100%;
+}
+
+/* ✅ On small screens, put nav below brand nicely */
+@media (max-width: 720px) {
+  .topbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .brand {
+    width: 100%;
+  }
+
+  .nav {
+    width: 100%;
+    display: flex;
+    gap: 10px;
+    flex-wrap: nowrap;           /* ✅ stop breaking outside */
+    justify-content: flex-start; /* ✅ align properly */
+  }
+
+  .nav a {
+    flex: 1;                     /* ✅ take equal space */
+    text-align: center;
+    padding: 12px 10px;
+    border-radius: 14px;
+    font-weight: 900;
+    white-space: nowrap;         /* ✅ no text break */
+  }
+
+  /* ✅ button already has navBtn but make it perfect */
+  .nav .navBtn {
+    flex: 1.1;
+  }
+}
+
+/* ✅ For extra-small screens (mobile small) */
+@media (max-width: 420px) {
+  .nav {
+    flex-direction: column;  /* ✅ stack buttons */
+  }
+
+  .nav a {
+    width: 100%;
+  }
+}
+/* =========================================================
+   ✅ LIGHT MODE TEXT FIX (ONLY HERO + NAV LOGO)
+   Keep these texts WHITE in light theme
+========================================================= */
+
+body[data-theme="light"] .brand b,
+body[data-theme="light"] .brand span {
+  color: rgba(255, 255, 255, 0.92) !important;
+}
+
+body[data-theme="light"] .tagLine {
+  color: rgba(255, 255, 255, 0.92) !important;
+}
+
+body[data-theme="light"] .title {
+  color: #ffffff !important;
+}
+
+body[data-theme="light"] .sub {
+  color: rgba(255, 255, 255, 0.82) !important;
+}
+
+/* ✅ Buttons - Get Started / Create Account */
+body[data-theme="light"] .btn.primary {
+  color: #ffffff !important;
+}
+
+body[data-theme="light"] .btn.ghost {
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+}
+
+/* ✅ Stats cards (AI-style / Real-time / Rank) */
+body[data-theme="light"] .stat b {
+  color: rgba(255, 255, 255, 0.92) !important;
+}
+
+body[data-theme="light"] .stat span {
+  color: rgba(255, 255, 255, 0.72) !important;
+}

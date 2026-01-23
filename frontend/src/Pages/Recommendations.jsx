@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import "../Styling/Recommendations.css";
 import { FileSpreadsheet } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 
 import {
   Sparkles,
@@ -16,6 +17,8 @@ import {
   TrendingUp,
   Users,
   BarChart3,
+  BookOpen,
+  ExternalLink,
 } from "lucide-react";
 
 const API = "https://student-performance-backend-xgvt.onrender.com";
@@ -30,6 +33,8 @@ const ICONS = {
 };
 
 export default function Recommendations() {
+  const token = localStorage.getItem("token");
+
   const [students, setStudents] = useState([]);
   const [selectedId, setSelectedId] = useState("");
   const [loading, setLoading] = useState(true);
@@ -39,13 +44,22 @@ export default function Recommendations() {
   const [sort, setSort] = useState("high");
 
   const [analysis, setAnalysis] = useState(null);
+  const [analysisLoading, setAnalysisLoading] = useState(false);
+
+  // 3rd party recommended resources
+  const [resources, setResources] = useState([]);
+  const [resourceLoading, setResourceLoading] = useState(false);
 
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
 
-  const authHeader = {
-    headers: { Authorization: `Bearer ${token}` },
-  };
+  const authHeader = useMemo(
+    () => ({
+      headers: { Authorization: `Bearer ${token}` },
+    }),
+    [token]
+  );
+
+  const safeCategory = (s) => s?.category || s?.Category || "Unknown";
 
   const fetchStudents = async () => {
     try {
@@ -54,14 +68,17 @@ export default function Recommendations() {
       const list = res.data || [];
       setStudents(list);
 
-      if (list.length > 0) setSelectedId(list[0]._id);
+      setSelectedId((prev) => {
+        if (!list.length) return "";
+        if (prev && list.some((x) => x._id === prev)) return prev;
+        return list[0]._id;
+      });
     } catch (err) {
       console.log(err);
-
-      if (err?.response?.status === 401) {
+      if (err.response?.status === 401) {
         localStorage.removeItem("token");
         localStorage.removeItem("user");
-        navigate("/login");
+        window.location.href = "/login";
       }
     } finally {
       setLoading(false);
@@ -70,31 +87,72 @@ export default function Recommendations() {
 
   const fetchAnalysis = async (id) => {
     try {
+      setAnalysisLoading(true);
       const res = await axios.get(`${API}/recommendations/${id}`, authHeader);
-      setAnalysis(res.data);
+      setAnalysis(res.data || null);
     } catch (err) {
       console.log(err);
       setAnalysis(null);
 
-      if (err?.response?.status === 401) {
+      if (err.response?.status === 401) {
         localStorage.removeItem("token");
         localStorage.removeItem("user");
-        navigate("/login");
+        window.location.href = "/login";
       }
+    } finally {
+      setAnalysisLoading(false);
+    }
+  };
+
+  // ✅ 3rd party API: Open Library Books Suggestions (No API key)
+  const fetchBooksForWeakness = async (weaknessList = []) => {
+    try {
+      const topic = weaknessList?.[0] || "study skills";
+      setResourceLoading(true);
+
+      const res = await axios.get(
+        `https://openlibrary.org/search.json?q=${encodeURIComponent(
+          topic
+        )}&limit=6`
+      );
+
+      const docs = res.data?.docs || [];
+
+      const mapped = docs
+        .filter((b) => b?.title)
+        .slice(0, 6)
+        .map((b) => ({
+          title: b.title,
+          author: (b.author_name && b.author_name[0]) || "Unknown Author",
+          year: b.first_publish_year || "-",
+          link: b.key ? `https://openlibrary.org${b.key}` : null,
+        }));
+
+      setResources(mapped);
+    } catch (e) {
+      console.log(e);
+      setResources([]);
+    } finally {
+      setResourceLoading(false);
     }
   };
 
   useEffect(() => {
-    if (!token) {
-      navigate("/login");
-      return;
-    }
-    fetchStudents();
+    if (!token) window.location.href = "/login";
+    else fetchStudents();
   }, []);
 
   useEffect(() => {
     if (selectedId) fetchAnalysis(selectedId);
   }, [selectedId]);
+
+  useEffect(() => {
+    if (analysis?.weaknesses?.length) {
+      fetchBooksForWeakness(analysis.weaknesses);
+    } else {
+      setResources([]);
+    }
+  }, [analysis]);
 
   const filteredStudents = useMemo(() => {
     let list = [...students];
@@ -106,11 +164,13 @@ export default function Recommendations() {
     }
 
     if (categoryFilter !== "All") {
-      list = list.filter((s) => s.category === categoryFilter);
+      list = list.filter((s) => safeCategory(s) === categoryFilter);
     }
 
     list.sort((a, b) =>
-      sort === "high" ? b.score - a.score : a.score - b.score
+      sort === "high"
+        ? (b.score || 0) - (a.score || 0)
+        : (a.score || 0) - (b.score || 0)
     );
 
     return list;
@@ -119,7 +179,8 @@ export default function Recommendations() {
   const categoryCount = useMemo(() => {
     const dist = { Excellent: 0, Good: 0, Average: 0, Poor: 0 };
     students.forEach((s) => {
-      if (dist[s.category] !== undefined) dist[s.category]++;
+      const cat = safeCategory(s);
+      if (dist[cat] !== undefined) dist[cat]++;
     });
     return dist;
   }, [students]);
@@ -137,15 +198,20 @@ export default function Recommendations() {
     window.open(`${API}/export/csv?token=${token}`, "_blank");
   };
 
+  const selectedStudent = useMemo(() => {
+    return students.find((s) => s._id === selectedId);
+  }, [students, selectedId]);
+
   return (
     <div className="recPage">
-      <div className="recTop">
+      {/* HEADER */}
+      <div className="recHeader">
         <div>
           <h1>Recommendations</h1>
           <p>Smart guidance generated from students records.</p>
         </div>
 
-        <div className="recStats">
+        <div className="recHeaderStats">
           <div className="statBox">
             <Users size={18} />
             <div>
@@ -164,6 +230,7 @@ export default function Recommendations() {
         </div>
       </div>
 
+      {/* TOOLBAR */}
       <div className="recToolbar">
         <div className="searchBox">
           <Search size={18} />
@@ -187,11 +254,6 @@ export default function Recommendations() {
               <option value="Average">Average</option>
               <option value="Poor">Poor</option>
             </select>
-
-            <button className="exportBtn csv" onClick={exportCSV}>
-              <FileSpreadsheet size={16} />
-              Export CSV
-            </button>
           </div>
 
           <div className="tool">
@@ -202,41 +264,80 @@ export default function Recommendations() {
             </select>
           </div>
 
+          <button className="exportBtn csv" onClick={exportCSV}>
+            <FileSpreadsheet size={16} />
+            Export CSV
+          </button>
+
           <button
-            className="profileBtn"
-            onClick={() => selectedId && navigate(`/profile/${selectedId}`)}
+            className="viewBtn"
+            onClick={() => selectedId && navigate(`/student/${selectedId}`)}
+            disabled={!selectedId}
           >
             View Profile
           </button>
         </div>
       </div>
 
+      {/* MAIN LAYOUT */}
       {loading ? (
-        <div className="recLoading">Loading recommendations...</div>
+        <div className="recLoading">
+          <div className="recSpinner" />
+          Loading recommendations...
+        </div>
       ) : filteredStudents.length === 0 ? (
-        <div className="recEmpty">No student found.</div>
+        <div className="recEmpty">
+          <Sparkles size={20} />
+          No student found.
+        </div>
       ) : (
-        <div className="recMainGrid">
-          <div className="recLeft">
-            <label className="miniLabel">Select Student</label>
-            <select
-              className="studentSelect"
-              value={selectedId}
-              onChange={(e) => setSelectedId(e.target.value)}
-            >
-              {filteredStudents.map((s) => (
-                <option key={s._id} value={s._id}>
-                  {s.name} ({s.score}/100)
-                </option>
+        <div className="recLayout">
+          {/* LEFT SIDEBAR */}
+          <aside className="recSidebar">
+            <div className="sideTop">
+              <span className="miniLabel">Students</span>
+              <select
+                className="studentSelect"
+                value={selectedId}
+                onChange={(e) => setSelectedId(e.target.value)}
+              >
+                {filteredStudents.map((s) => (
+                  <option key={s._id} value={s._id}>
+                    {s.name} ({s.score}/100)
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="studentList">
+              {filteredStudents.slice(0, 12).map((s) => (
+                <button
+                  key={s._id}
+                  onClick={() => setSelectedId(s._id)}
+                  className={`studentPill ${
+                    selectedId === s._id ? "active" : ""
+                  }`}
+                >
+                  <div className="pillLeft">
+                    <b>{s.name}</b>
+                    <span>{safeCategory(s)}</span>
+                  </div>
+                  <div className="pillScore">{s.score || 0}</div>
+                </button>
               ))}
-            </select>
+            </div>
 
             {analysis?.student && (
-              <div className="studentCard">
+              <motion.div
+                className="studentCard"
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.35 }}
+              >
                 <div className="studentTop">
                   <div>
                     <h2>{analysis.student.name}</h2>
-                    <p>{analysis.student.gender}</p>
+                    <p>{analysis.student.gender || "—"}</p>
                   </div>
                   <span className={badge(analysis.student.category)}>
                     {analysis.student.category}
@@ -245,44 +346,150 @@ export default function Recommendations() {
 
                 <div className="weakBox">
                   <h4>Weakness Detector</h4>
-                  <ul>
-                    {analysis.weaknesses.map((w, i) => (
-                      <li key={i}>{w}</li>
-                    ))}
-                  </ul>
+                  {analysis.weaknesses?.length ? (
+                    <ul>
+                      {analysis.weaknesses.map((w, i) => (
+                        <li key={i}>{w}</li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="mutedTxt">No weakness data found.</p>
+                  )}
                 </div>
-              </div>
+              </motion.div>
             )}
-          </div>
+          </aside>
 
-          <div className="recRight">
-            <h3>Action Recommendations</h3>
+          {/* RIGHT CONTENT */}
+          <main className="recContent">
+            <div className="contentHead">
+              <div>
+                <h3>Action Recommendations</h3>
+                <p className="mutedTxt">
+                  Personalized steps for{" "}
+                  <b>{selectedStudent?.name || "student"}</b>
+                </p>
+              </div>
+
+              <AnimatePresence mode="wait">
+                {analysisLoading ? (
+                  <motion.div
+                    key="loading"
+                    className="smallLoading"
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -6 }}
+                  >
+                    <div className="dotPulse" />
+                    Generating analysis...
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="ready"
+                    className="smallLoading ready"
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -6 }}
+                  >
+                    <Sparkles size={16} />
+                    Updated
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
 
             <div className="recGrid">
-              {analysis?.recommendations?.map((r, idx) => (
-                <div key={idx} className="recBox">
-                  <div className="recBoxTop">
-                    <div className="recIcon">{ICONS[r.icon]}</div>
-                    <span className="recTag">{r.tag}</span>
-                  </div>
-                  <h4>{r.title}</h4>
-                  <p>{r.desc}</p>
+              {analysis?.recommendations?.length ? (
+                analysis.recommendations.map((r, idx) => (
+                  <motion.div
+                    key={idx}
+                    className="recBox"
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.32, delay: idx * 0.05 }}
+                  >
+                    <div className="recBoxTop">
+                      <div className="recIcon">
+                        {ICONS[r.icon] || <Sparkles size={18} />}
+                      </div>
+                      <span className="recTag">{r.tag || "Recommendation"}</span>
+                    </div>
+                    <h4>{r.title}</h4>
+                    <p>{r.desc}</p>
+                  </motion.div>
+                ))
+              ) : (
+                <div className="recEmptyCard">
+                  <Sparkles size={18} />
+                  No recommendations available for this student.
                 </div>
-              ))}
+              )}
             </div>
 
             <div className="planBox">
               <h3>Weekly Improvement Plan</h3>
+
               <div className="planGrid">
-                {analysis?.weekly_plan?.map((p, i) => (
-                  <div className="planItem" key={i}>
-                    <b>{p.day}</b>
-                    <span>{p.task}</span>
-                  </div>
-                ))}
+                {analysis?.weekly_plan?.length ? (
+                  analysis.weekly_plan.map((p, i) => (
+                    <motion.div
+                      className="planItem"
+                      key={i}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3, delay: i * 0.04 }}
+                    >
+                      <b>{p.day}</b>
+                      <span>{p.task}</span>
+                    </motion.div>
+                  ))
+                ) : (
+                  <div className="mutedTxt">No weekly plan found.</div>
+                )}
               </div>
             </div>
-          </div>
+
+            {/* 3rd party resources */}
+            <div className="thirdPartyBox">
+              <div className="thirdTop">
+                <h3>
+                  <BookOpen size={18} /> Learning Resources
+                </h3>
+                <p className="mutedTxt">
+                  Suggested books related to weakness (Open Library)
+                </p>
+              </div>
+
+              {resourceLoading ? (
+                <div className="miniLoaderRow">
+                  <div className="dotPulse" />
+                  Fetching resources...
+                </div>
+              ) : resources.length ? (
+                <div className="resourceGrid">
+                  {resources.map((b, idx) => (
+                    <a
+                      key={idx}
+                      href={b.link || "#"}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="resourceCard"
+                    >
+                      <div className="resTop">
+                        <b>{b.title}</b>
+                        <ExternalLink size={16} />
+                      </div>
+                      <span className="mutedTxt">
+                        {b.author} • {b.year}
+                      </span>
+                    </a>
+                  ))}
+                </div>
+              ) : (
+                <div className="mutedTxt">No resources found.</div>
+              )}
+            </div>
+          </main>
         </div>
       )}
     </div>

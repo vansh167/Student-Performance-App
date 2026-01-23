@@ -3,9 +3,8 @@ Terminal commands-:
 --------------------------------------------Backend-----------------------------------------------
 ---->  cd ./backend
 
-        01>.  One time command ---->              python -m pip install fastapi uvicorn python-dotenv pymongo
+          1>  Run Backend -->   python -m uvicorn main:app --reload
 
-         Every time >     Run Backend -->         python -m uvicorn main:app --reload
 
 
 --------------------------------------------Frontend----------------------------------------------
@@ -16,6 +15,15 @@ Terminal commands-:
           2> Run Frontend -->  npm  run dev 
 
 
+
+
+      Admin Key :
+
+                email:     admin@gmail.com
+
+                password:  12345
+
+              
 
 
 

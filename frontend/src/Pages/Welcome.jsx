@@ -52,10 +52,11 @@ export default function Welcome() {
 
     // ✅ Live preview data changing
     const sample = [
-      { name: "Rahul Sharma", score: "86 / 100", cat: "Excellent", trend: "Up" },
-      { name: "Neha Verma", score: "74 / 100", cat: "Good", trend: "Up" },
-      { name: "Aman Singh", score: "56 / 100", cat: "Average", trend: "Down" },
-      { name: "Kiran Patel", score: "42 / 100", cat: "Poor", trend: "Up" },
+      { name: "Bhawika Dhanjal", score: "86 / 100", cat: "Excellent", trend: "Up" },
+      { name: "Vansh Dhiman", score: "74 / 100", cat: "Good", trend: "Up" },
+      { name: "Suhani", score: "56 / 100", cat: "Average", trend: "Down" },
+      { name: "Ritika", score: "42 / 100", cat: "Poor", trend: "Up" },
+      { name: "Taniya", score: "42 / 100", cat: "Poor", trend: "Up" },
     ];
 
     let idx = 0;
@@ -76,18 +77,18 @@ export default function Welcome() {
     // ✅ Leaderboard changing (FIXED: inside useEffect)
     const leaderboard = [
       [
-        { name: "Rahul Sharma", score: 92, trend: "Up" },
-        { name: "Neha Verma", score: 88, trend: "Up" },
+        { name: "Bhawika Dhanjal", score: 92, trend: "Up" },
+        { name: "Vansh Dhiman", score: 88, trend: "Up" },
         { name: "Aman Singh", score: 81, trend: "Down" },
       ],
       [
         { name: "Neha Verma", score: 94, trend: "Up" },
-        { name: "Rahul Sharma", score: 90, trend: "Down" },
+        { name: "Suhani", score: 90, trend: "Down" },
         { name: "Aman Singh", score: 79, trend: "Down" },
       ],
       [
-        { name: "Aman Singh", score: 95, trend: "Up" },
-        { name: "Rahul Sharma", score: 89, trend: "Down" },
+        { name: "Taniya", score: 95, trend: "Up" },
+        { name: "Ritika", score: 89, trend: "Down" },
         { name: "Neha Verma", score: 85, trend: "Down" },
       ],
     ];

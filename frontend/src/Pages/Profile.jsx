@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useMemo, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import "../Styling/Profile.css";
+import "../styling/Profile.css";
 
 import {
   ArrowLeft,
@@ -18,7 +18,6 @@ import {
 
 const API = "https://student-performance-backend-xgvt.onrender.com";
 
-
 export default function Profile() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -26,10 +25,21 @@ export default function Profile() {
   const [student, setStudent] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const token = localStorage.getItem("token");
+
   const fetchStudent = async () => {
     try {
+      if (!token) {
+        navigate("/login");
+        return;
+      }
+
       setLoading(true);
-      const res = await axios.get(`${API}/students/${id}`);
+
+      const res = await axios.get(`${API}/students/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
       setStudent(res.data);
     } catch (err) {
       console.log(err);
@@ -120,7 +130,6 @@ export default function Profile() {
 
   return (
     <div className="profilePage">
-      {/* top bar */}
       <div className="profileTop">
         <button className="backBtn" onClick={() => navigate(-1)}>
           <ArrowLeft size={18} /> Back
@@ -132,7 +141,6 @@ export default function Profile() {
         </div>
       </div>
 
-      {/* summary cards */}
       <div className="profileCards">
         <div className="pCard">
           <div className="pIcon">
@@ -161,9 +169,7 @@ export default function Profile() {
         </div>
       </div>
 
-      {/* details */}
       <div className="profileGrid">
-        {/* Left info */}
         <div className="infoBox">
           <h3>Student Information</h3>
 
@@ -210,7 +216,6 @@ export default function Profile() {
           </div>
         </div>
 
-        {/* Weakness */}
         <div className="weakBox2">
           <h3>Weakness Detector</h3>
           <ul>
@@ -220,7 +225,6 @@ export default function Profile() {
           </ul>
         </div>
 
-        {/* Recommendations */}
         <div className="recBox2">
           <h3>Recommendations</h3>
           <div className="recList">

@@ -1,6 +1,6 @@
 /* =========================================================
-   ✅ Welcome Page CSS (Rewritten Full + Responsive)
-   ✅ Dark Theme Base
+   ✅ FULL WELCOME PAGE CSS (REWRITTEN + RESPONSIVE)
+   ✅ NOTHING REMOVED — ALL CLASSES SAME
 ========================================================= */
 
 /* ============ GLOBAL RESET ============ */
@@ -11,32 +11,18 @@
   font-family: "Inter", system-ui, sans-serif;
 }
 
-/* ✅ Variables (Responsive Padding + Fonts) */
-:root {
-  --pad: clamp(16px, 4vw, 70px);
-  --gap: clamp(22px, 4vw, 55px);
-
-  --title: clamp(32px, 5vw, 56px);
-  --sub: clamp(14px, 1.35vw, 16px);
-
-  --glass: rgba(255, 255, 255, 0.06);
-  --glassBorder: rgba(255, 255, 255, 0.12);
-  --textMute: rgba(255, 255, 255, 0.72);
-}
-
 body {
   min-height: 100vh;
-  overflow-x: hidden;
+  overflow-x: hidden; /* ✅ allow scroll bottom */
   overflow-y: auto;
   color: #fff;
-  background: #05070f;
 }
 
-/* =========================================================
-   BACKGROUND LAYERS
-========================================================= */
+/* ===========================
+   Background
+=========================== */
 .bg {
-  position: fixed;
+  position: fixed; /* ✅ fixed so scroll doesn't break background */
   inset: 0;
   background: radial-gradient(circle at top, #0b1220, #05070f 70%);
   z-index: -5;
@@ -52,9 +38,11 @@ body {
   z-index: -4;
 }
 
-/* Floating blobs */
+/* ===========================
+   Floating blobs
+=========================== */
 .blob {
-  position: fixed;
+  position: fixed; /* ✅ fixed to not move while scroll */
   width: clamp(220px, 35vw, 420px);
   height: clamp(220px, 35vw, 420px);
   border-radius: 50%;
@@ -87,15 +75,15 @@ body {
   }
 }
 
-/* =========================================================
-   TOPBAR
-========================================================= */
+/* ===========================
+   Topbar
+=========================== */
 .topbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 18px var(--pad);
-  flex-wrap: wrap;
+  /* padding: 22px 60px; */
+  flex-wrap: wrap; /* ✅ responsive */
   gap: 14px;
 }
 
@@ -126,20 +114,19 @@ body {
   opacity: 0.75;
 }
 
-/* Navbar links */
 .nav {
   display: flex;
-  gap: 16px;
+  gap: 18px;
   align-items: center;
-  flex-wrap: wrap;
+  flex-wrap: wrap; /* ✅ responsive */
 }
 
 .nav a {
   text-decoration: none;
   color: #fff;
-  font-weight: 800;
+  font-weight: 700;
   opacity: 0.85;
-  transition: 0.25s ease;
+  transition: 0.25s;
 }
 
 .nav a:hover {
@@ -154,15 +141,15 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-/* =========================================================
-   HERO SECTION
-========================================================= */
+/* ===========================
+   HERO
+=========================== */
 .hero {
-  min-height: calc(100vh - 80px);
+  min-height: calc(100vh - 80px); /* ✅ allow scroll */
   display: grid;
   grid-template-columns: 1.3fr 1fr;
-  gap: var(--gap);
-  padding: 40px var(--pad);
+  gap: clamp(24px, 4vw, 50px);
+  padding: clamp(24px, 4vw, 40px) clamp(18px, 6vw, 70px);
   align-items: center;
 }
 
@@ -173,7 +160,7 @@ body {
 @keyframes fadeUp {
   from {
     opacity: 0;
-    transform: translateY(26px);
+    transform: translateY(30px);
   }
   to {
     opacity: 1;
@@ -184,16 +171,20 @@ body {
 .tagLine {
   width: fit-content;
   padding: 8px 14px;
-  border-radius: 12px;
+  border-radius: 10px;
   background: rgba(255, 255, 255, 0.07);
   border: 1px solid rgba(255, 255, 255, 0.15);
-  font-weight: 900;
+  font-weight: 800;
   font-size: 13px;
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+  -ms-border-radius: 0px;
+  -o-border-radius: 0px;
 }
 
 .title {
   margin-top: 20px;
-  font-size: var(--title);
+  font-size: clamp(33px, 5vw, 56px);
   font-weight: 1000;
   line-height: 1.05;
   letter-spacing: -1px;
@@ -214,12 +205,11 @@ body {
 .sub {
   margin-top: 18px;
   max-width: 680px;
-  font-size: var(--sub);
+  font-size: clamp(14px, 1.4vw, 16px);
   line-height: 1.7;
   opacity: 0.88;
 }
 
-/* CTA */
 .ctaRow {
   margin-top: 26px;
   display: flex;
@@ -232,7 +222,7 @@ body {
   padding: 14px 26px;
   font-weight: 900;
   border-radius: 18px;
-  transition: 0.25s ease;
+  transition: 0.25s;
 }
 
 .btn.primary {
@@ -257,7 +247,9 @@ body {
   background: rgba(255, 255, 255, 0.12);
 }
 
-/* Stats */
+/* ===========================
+   Stats
+=========================== */
 .stats {
   margin-top: 26px;
   display: flex;
@@ -266,6 +258,7 @@ body {
 }
 
 .stat {
+  min-width: 170px;
   flex: 1 1 170px;
   padding: 12px 14px;
   border-radius: 18px;
@@ -285,7 +278,9 @@ body {
   margin-top: 5px;
 }
 
-/* Feature Grid */
+/* ===========================
+   Features
+=========================== */
 .featureGrid {
   margin-top: 26px;
   display: grid;
@@ -296,9 +291,9 @@ body {
 .featureCard {
   padding: 16px;
   border-radius: 22px;
-  background: var(--glass);
-  border: 1px solid var(--glassBorder);
-  transition: 0.25s ease;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  transition: 0.25s;
 }
 
 .featureCard:hover {
@@ -318,16 +313,18 @@ body {
   opacity: 0.85;
 }
 
-/* Right Card */
+/* ===========================
+   Right Preview Card
+=========================== */
 .heroRight {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-/* =========================================================
-   PREVIEW CARD (RIGHT)
-========================================================= */
+/* ===========================
+   ✅ Preview Card
+=========================== */
 .previewCard {
   width: min(420px, 100%);
   border-radius: 22px;
@@ -349,6 +346,7 @@ body {
   pointer-events: none;
 }
 
+/* Header */
 .previewTop {
   display: flex;
   align-items: center;
@@ -372,7 +370,7 @@ body {
   box-shadow: 0 0 0 5px rgba(34, 197, 94, 0.14);
 }
 
-/* ✅ FIXED IMAGE RESPONSIVE */
+/* ✅ Image Responsive Fix */
 .imgBox img {
   width: min(420px, 100%);
   height: auto;
@@ -383,7 +381,8 @@ body {
 }
 
 @keyframes floatImg {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(4px);
   }
   50% {
@@ -391,7 +390,7 @@ body {
   }
 }
 
-/* Mini boxes */
+/* Mini Cards */
 .miniBoxes {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -414,20 +413,25 @@ body {
 .mini b {
   font-size: 12px;
   color: rgba(255, 255, 255, 0.72);
+  letter-spacing: 0.4px;
 }
 
 .mini span {
   font-size: 20px;
-  font-weight: 900;
+  font-weight: 800;
   color: rgba(255, 255, 255, 0.96);
 }
 
 .mini.good {
-  background: linear-gradient(135deg, rgba(34, 197, 94, 0.18), rgba(16, 185, 129, 0.10));
+  background: linear-gradient(
+    135deg,
+    rgba(34, 197, 94, 0.18),
+    rgba(16, 185, 129, 0.10)
+  );
   border: 1px solid rgba(34, 197, 94, 0.30);
 }
 
-/* Chart bars */
+/* Chart Bars */
 .chartBars {
   margin-top: 16px;
   height: 90px;
@@ -460,7 +464,11 @@ body {
 .cbar {
   width: 16%;
   border-radius: 14px 14px 6px 6px;
-  background: linear-gradient(180deg, rgba(59, 130, 246, 0.95), rgba(59, 130, 246, 0.25));
+  background: linear-gradient(
+    180deg,
+    rgba(59, 130, 246, 0.95),
+    rgba(59, 130, 246, 0.25)
+  );
   box-shadow: 0 12px 25px rgba(59, 130, 246, 0.35);
   position: relative;
   z-index: 2;
@@ -491,8 +499,12 @@ body {
   z-index: 2;
 }
 
+.bottomNote b {
+  color: rgba(255, 255, 255, 0.95);
+}
+
 /* =========================================================
-   CURSOR GLOW (Desktop Only)
+   ✅ Cursor Glow Effect (merged once only)
 ========================================================= */
 .cursorGlow {
   position: fixed;
@@ -507,6 +519,7 @@ body {
   mix-blend-mode: screen;
 }
 
+/* ✅ Mobile: hide cursor effect */
 @media (max-width: 768px) {
   .cursorGlow,
   .cursorDot {
@@ -515,21 +528,43 @@ body {
 }
 
 /* =========================================================
-   ✅ RESPONSIVE FIXES
+   ✅ Responsive
 ========================================================= */
 @media (max-width: 980px) {
   .hero {
     grid-template-columns: 1fr;
     padding: 30px 18px;
+    gap: 30px;
+  }
+
+  .title {
+    font-size: 40px;
+  }
+
+  .topbar {
+    padding: 18px 18px;
   }
 
   .previewCard {
-    max-width: 460px;
+    width: 100%;
+    max-width: 420px;
   }
 }
 
 @media (max-width: 520px) {
+  .title {
+    font-size: 33px;
+  }
+
   .featureGrid {
+    grid-template-columns: 1fr; /* ✅ single column on small screens */
+  }
+
+  .stat {
+    min-width: 100%;
+  }
+
+  .miniBoxes {
     grid-template-columns: 1fr;
   }
 
@@ -537,18 +572,11 @@ body {
     width: 100%;
     text-align: center;
   }
-
-  .miniBoxes {
-    grid-template-columns: 1fr;
-  }
 }
 
 /* =========================================================
-   ✅ KEEP YOUR BOTTOM SECTION / EXTRA SECTIONS CODE BELOW
-   (Your bottom section is already responsive ✅)
+   ✅ Bottom Section Only
 ========================================================= */
-
-/* ✅ Bottom section only */
 .bottomSection {
   padding: 90px 7%;
   position: relative;
@@ -579,7 +607,6 @@ body {
   line-height: 1.7;
 }
 
-/* ✅ Bottom grid auto-fit */
 .stepGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -587,6 +614,828 @@ body {
   margin-top: 26px;
 }
 
-/* ✅ You can keep rest code same (StepCard, Panels, FAQ etc.) */
-/* --------------------------------------------------------- */
-/* I didn't delete your extra sections - all will work same ✅ */
+.stepCard {
+  padding: 18px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  position: relative;
+  overflow: hidden;
+  transition: 0.35s ease;
+}
+
+.stepCard::after {
+  content: "";
+  position: absolute;
+  inset: -80px;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.18), transparent 55%);
+  opacity: 0;
+  transition: 0.4s ease;
+}
+
+.stepCard:hover {
+  transform: translateY(-7px);
+  border-color: rgba(59, 130, 246, 0.35);
+}
+
+.stepCard:hover::after {
+  opacity: 1;
+}
+
+.stepNum {
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  font-weight: 900;
+  color: white;
+  margin-bottom: 12px;
+  background: linear-gradient(
+    135deg,
+    rgba(59, 130, 246, 0.85),
+    rgba(147, 51, 234, 0.75)
+  );
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+}
+
+.stepCard h3 {
+  color: #fff;
+  margin: 4px 0 6px;
+  font-size: 16px;
+  position: relative;
+  z-index: 2;
+}
+
+.stepCard p {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0;
+  position: relative;
+  z-index: 2;
+}
+
+/* =========================================================
+   Live + Rank Panels
+========================================================= */
+.livePanel,
+.rankPanel {
+  padding: 20px;
+  border-radius: 20px;
+  background: rgba(15, 23, 42, 0.86);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+  overflow: hidden;
+}
+
+.liveHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.liveHead h3 {
+  margin: 0;
+  font-size: 18px;
+  color: white;
+}
+
+.liveTag {
+  padding: 7px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(59, 130, 246, 0.18);
+  border: 1px solid rgba(59, 130, 246, 0.25);
+}
+
+.liveGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.liveBox {
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: 0.3s ease;
+}
+
+.liveBox:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.liveBox b {
+  display: block;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 6px;
+}
+
+.liveBox span {
+  font-size: 20px;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: 0.2px;
+}
+
+.liveBox.good {
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.25);
+}
+
+.liveBox.trendUp {
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.25);
+}
+
+.liveNote {
+  margin-top: 14px;
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.74);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.rankPanel h3 {
+  color: white;
+  margin: 0 0 12px;
+  font-size: 18px;
+}
+
+.rankList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.rankRow {
+  display: grid;
+  grid-template-columns: 60px 1fr 70px 70px;
+  gap: 10px;
+  align-items: center;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: 0.3s ease;
+}
+
+.rankRow:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+.rankRow .rk {
+  font-weight: 900;
+  color: white;
+  opacity: 0.9;
+}
+
+.rankRow .nm {
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 700;
+}
+
+.rankRow .sc {
+  color: white;
+  font-weight: 900;
+  text-align: right;
+}
+
+.rankRow .tr {
+  text-align: right;
+  font-size: 18px;
+}
+
+.gold {
+  border-color: rgba(255, 215, 0, 0.25);
+}
+
+.silver {
+  border-color: rgba(192, 192, 192, 0.25);
+}
+
+.bronze {
+  border-color: rgba(205, 127, 50, 0.25);
+}
+
+.avgBox {
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 14px;
+}
+
+.avgBox span {
+  font-weight: 900;
+  font-size: 18px;
+  color: white;
+}
+
+/* Reveal animation */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: 0.8s ease;
+}
+
+.reveal.show {
+  opacity: 1;
+  transform: translateY(0px);
+}
+
+@media (max-width: 560px) {
+  .rankRow {
+    grid-template-columns: 50px 1fr 60px 55px;
+  }
+
+  .bottomTop h2 {
+    font-size: 28px;
+  }
+}
+
+.bottomSection .reveal {
+  opacity: 1 !important;
+  transform: translateY(0px) !important;
+}
+
+/* =========================================================
+   Icons Global
+========================================================= */
+.featIcon svg,
+.stepIconBox svg,
+.infoIcon svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: white;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* =========================================================
+   NEW FEATURE UI
+========================================================= */
+.featureGridNew {
+  margin-top: 22px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(260px, 1fr));
+  gap: 14px;
+}
+
+@media (max-width: 950px) {
+  .featureGridNew {
+    grid-template-columns: 1fr;
+  }
+}
+
+.featureCardNew {
+  border-radius: 18px;
+  padding: 18px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  backdrop-filter: blur(12px);
+  transition: 0.35s ease;
+}
+
+.featureCardNew:hover {
+  transform: translateY(-6px);
+  border-color: rgba(99, 102, 241, 0.35);
+}
+
+.featTop {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.featIcon {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+}
+
+.featMeta {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.featMeta span {
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Icon Colors */
+.blue {
+  background: rgba(59, 130, 246, 0.25);
+  border: 1px solid rgba(59, 130, 246, 0.25);
+}
+.purple {
+  background: rgba(147, 51, 234, 0.25);
+  border: 1px solid rgba(147, 51, 234, 0.25);
+}
+.green {
+  background: rgba(34, 197, 94, 0.2);
+  border: 1px solid rgba(34, 197, 94, 0.25);
+}
+.orange {
+  background: rgba(249, 115, 22, 0.22);
+  border: 1px solid rgba(249, 115, 22, 0.25);
+}
+
+/* =========================================================
+   Bottom step new
+========================================================= */
+.stepGridNew {
+  margin-top: 18px;
+}
+
+.stepCardNew {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: 0.35s ease;
+}
+
+.stepCardNew:hover {
+  transform: translateY(-6px);
+  border-color: rgba(59, 130, 246, 0.35);
+}
+
+.stepLeft {
+  width: 54px;
+}
+.stepMid {
+  flex: 1;
+}
+.stepMid h3 {
+  margin: 0 0 4px;
+  font-size: 16px;
+  color: white;
+}
+.stepMid p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.stepIconBox {
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stepRight {
+  font-weight: 900;
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* =========================================================
+   Bottom Grid 2
+========================================================= */
+.bottomGrid2 {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 16px;
+  margin-top: 18px;
+}
+
+@media (max-width: 900px) {
+  .bottomGrid2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================================================
+   Insights panel
+========================================================= */
+.infoPanel {
+  padding: 20px;
+  border-radius: 20px;
+  background: rgba(15, 23, 42, 0.86);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+}
+
+.infoTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.infoTag {
+  padding: 7px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  background: rgba(147, 51, 234, 0.18);
+  border: 1px solid rgba(147, 51, 234, 0.25);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.infoList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.infoItem {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 12px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.infoIcon {
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.infoItem b {
+  display: block;
+  color: white;
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+
+.infoItem p {
+  margin: 0;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.6;
+}
+
+.infoFooter {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.infoMini {
+  padding: 12px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  text-align: center;
+}
+
+.infoMini b {
+  display: block;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.65);
+  margin-bottom: 4px;
+}
+
+.infoMini span {
+  font-size: 18px;
+  font-weight: 900;
+  color: white;
+}
+
+/* =========================================================
+   Live extra details
+========================================================= */
+.liveExtra {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.liveExtraItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.liveExtraItem p {
+  margin: 0;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.dot.blue {
+  background: rgba(59, 130, 246, 0.9);
+}
+.dot.green {
+  background: rgba(34, 197, 94, 0.9);
+}
+.dot.purple {
+  background: rgba(147, 51, 234, 0.9);
+}
+
+/* rank heading improvement */
+.rankHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.rankBadge {
+  padding: 7px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(59, 130, 246, 0.18);
+  border: 1px solid rgba(59, 130, 246, 0.25);
+}
+
+/* =========================================================
+   Feature Grid One Line
+========================================================= */
+.featureGridNewOneLine {
+  width: 90%;
+  margin-left: 5%;
+  margin-top: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.featureCardLine {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  backdrop-filter: blur(12px);
+  transition: 0.35s ease;
+}
+
+.featureCardLine:hover {
+  transform: translateY(-6px);
+  border-color: rgba(99, 102, 241, 0.35);
+}
+
+.featLineLeft {
+  width: 56px;
+  display: flex;
+  justify-content: center;
+}
+
+.featLineMid {
+  flex: 1;
+  min-width: 250px;
+}
+
+.featLineMid h3 {
+  margin: 0 0 6px;
+  font-size: 16px;
+  color: white;
+}
+
+.featLineMid p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.featLineRight {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.featLineRight span {
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+@media (max-width: 720px) {
+  .featureCardLine {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .featLineLeft {
+    width: auto;
+  }
+  .featLineRight {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
+
+/* =========================================================
+   Extra Section / FAQ / Testimonials
+========================================================= */
+.extraSection,
+.faqSection,
+.testimonialSection {
+  margin-top: 28px;
+  padding: 22px;
+  border-radius: 22px;
+  background: rgba(15, 23, 42, 0.86);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+}
+
+.extraHeader {
+  margin-bottom: 14px;
+}
+
+.extraHeader h3 {
+  margin: 0 0 6px;
+  color: white;
+  font-size: 18px;
+}
+
+.extraHeader p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.extraCards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.extraCard {
+  padding: 14px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.extraCard b {
+  display: block;
+  margin-bottom: 6px;
+  color: white;
+  font-size: 14px;
+}
+
+.extraCard p {
+  margin: 0;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.72);
+  line-height: 1.6;
+}
+
+.faqGrid {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.faqItem {
+  padding: 14px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.faqItem b {
+  color: white;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.faqItem p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.testimonialGrid {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.testCard {
+  padding: 14px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.testCard b {
+  color: white;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.testCard p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* Footer */
+.bottomFooter {
+  margin-top: 22px;
+  padding: 18px 22px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.footerGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.footerGrid b {
+  color: white;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.footerGrid p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+@media (max-width: 900px) {
+  .extraCards {
+    grid-template-columns: 1fr;
+  }
+  .testimonialGrid {
+    grid-template-columns: 1fr;
+  }
+  .faqGrid {
+    grid-template-columns: 1fr;
+  }
+  .footerGrid {
+    grid-template-columns: 1fr;
+  }
+}

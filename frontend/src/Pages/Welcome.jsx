@@ -161,17 +161,19 @@ export default function Welcome() {
 
       <main className="hero">
         <section className="heroLeft">
-          <div className="tagLine" style={{"borderRadius":"10px"}}>
+          <div className="tagLine" style={{"borderRadius":"10px", color: "white" }
+}}>
             Smart Dashboard • Prediction • Recommendation • Ranking
           </div>
 
-          <h1 className="title">
+          <h1 className="title" style={{ color: "white" }}
+>
             Predict student <span className="grad">performance</span>
             <br />
             and improve results with <span className="grad2">smart suggestions</span>.
           </h1>
 
-          <p className="sub">
+          <p className="sub" style={{ color: "white" }}>
             This system helps you <b>predict score</b>, classify students into{" "}
             <b>Excellent / Good / Average / Poor</b>, generate personalized
             recommendations, and show rank positions using leaderboards.
@@ -186,16 +188,16 @@ export default function Welcome() {
 
           <div className="stats">
             <div className="stat">
-              <b>AI-style</b>
-              <span>Recommendation System</span>
+              <b style={{ color: "white" }}>AI-style</b>
+              <span style={{ color: "white" }}>Recommendation System</span>
             </div>
             <div className="stat">
-              <b>Real-time</b>
-              <span>Charts + Prediction</span>
+              <b style={{ color: "white" }}>Real-time</b>
+              <span style={{ color: "white" }}>Charts + Prediction</span>
             </div>
             <div className="stat">
-              <b>Rank</b>
-              <span>Leaderboard Page</span>
+              <b style={{ color: "white" }}>Rank</b>
+              <span style={{ color: "white" }}>Leaderboard Page</span>
             </div>
           </div>
 

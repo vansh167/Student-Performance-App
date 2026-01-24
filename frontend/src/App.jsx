@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";  
- 
+ import { useEffect, useState } from "react";
   
 import Recommendations from "./Pages/Recommendations.jsx";  
 import Profile from "./Pages/Profile.jsx";  
@@ -18,33 +18,48 @@ function PrivateRoute({ children }) {
   return token ? children : <Navigate to="/login" replace />;
 }
 
-function Layout({ children }) {
-  
+function Layout({ theme, setTheme, children }) {
   const location = useLocation();
 
   const hideNavbarRoutes = ["/", "/welcome", "/login", "/signup"];
   const hideNavbar = hideNavbarRoutes.includes(location.pathname);
 
-  return (
+ return (
     <>
-      {!hideNavbar && <Navbar />}
-
+      {!hideNavbar && <Navbar theme={theme} setTheme={setTheme} />}
       {children}
     </>
   );
 }
 
 export default function App() {
+  const [theme, setTheme] = useState("dark");
+
+  useEffect(() => {
+    const saved = localStorage.getItem("theme");
+    if (saved) setTheme(saved);
+  }, []);
+
+  useEffect(() => {
+    document.body.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
   return (
     <BrowserRouter>
-      <Layout>
+      <Layout theme={theme} setTheme={setTheme}>
         <Routes>
+          {/* ✅ FIRST PAGE = Welcome */}
           <Route path="/" element={<Welcome />} />
+
+          {/* optional: if you still want /welcome route */}
           <Route path="/welcome" element={<Welcome />} />
 
+          {/* Auth */}
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
 
+          {/* Protected pages */}
           <Route
             path="/home"
             element={
@@ -62,9 +77,7 @@ export default function App() {
               </PrivateRoute>
             }
           />
-
-          <Route path="/admin" element={<AdminPanel />} />
-
+<Route path="/admin" element={<AdminPanel/>} />
           <Route
             path="/profile/:id"
             element={
@@ -77,8 +90,10 @@ export default function App() {
           <Route path="/student/:id" element={<Profile />} />
           <Route path="/ranking" element={<Ranking />} />
           <Route path="/about" element={<About />} />
-          <Route path="/analytics" element={<StudentAnalytics />} />
+          <Route path="/analytics" element={<StudentAnalytics/>} />
 
+
+          {/* fallback */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Layout>

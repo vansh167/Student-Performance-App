@@ -144,8 +144,8 @@ export default function Welcome() {
         <div className="brand">
           <img src={studentImg} alt="Student" style={{ height: "55px" }} />
           <div>
-            <b>Student Performance</b>
-            <span>Prediction System</span>
+            <b style={{color: "white" }}>Student Performance</b>
+            <span style={{color: "white" }}>Prediction System</span>
           </div>
         </div>
 

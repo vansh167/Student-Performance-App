@@ -23,7 +23,7 @@ function Layout({ children }) {
   const { theme, setTheme } = useContext(ThemeContext);
   const location = useLocation();
 
-  const hideNavbarRoutes = ["/", "/welcome", "/login", "/signup"];
+  const hideNavbarRoutes = ["/login", "/signup"];
   const hideNavbar = hideNavbarRoutes.includes(location.pathname);
 
   return (

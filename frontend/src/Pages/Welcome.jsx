@@ -161,8 +161,8 @@ export default function Welcome() {
 
       <main className="hero">
         <section className="heroLeft">
-          <div className="tagLine" style={{"borderRadius":"10px", color: "white" }
-}}>
+          <div className="tagLine" style={{ borderRadius: "10px", color: "white" }}>
+
             Smart Dashboard • Prediction • Recommendation • Ranking
           </div>
 

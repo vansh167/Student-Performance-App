@@ -368,4 +368,17 @@
     padding: 0 14px;
   }
 }
+/* Prevent layout breaking */
+* {
+  box-sizing: border-box;
+}
 
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+body {
+  overflow-x: hidden;
+}

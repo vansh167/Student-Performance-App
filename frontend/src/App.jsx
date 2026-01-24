@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useContext } from "react";
-import { ThemeContext } from "./Component/ThemeContext.jsx";
+import { ThemeContext } from "./Context/ThemeContext.jsx";
 
 import Recommendations from "./Pages/Recommendations.jsx";
 import Profile from "./Pages/Profile.jsx";
@@ -23,7 +23,7 @@ function Layout({ children }) {
   const { theme, setTheme } = useContext(ThemeContext);
   const location = useLocation();
 
-  const hideNavbarRoutes = ["/login", "/signup"];
+  const hideNavbarRoutes = ["/", "/welcome", "/login", "/signup"];
   const hideNavbar = hideNavbarRoutes.includes(location.pathname);
 
   return (

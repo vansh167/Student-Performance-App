@@ -1,0 +1,219 @@
+/* ========== PAGE WRAPPER ========== */
+.resources-page {
+  min-height: 100vh;
+  padding-bottom: 60px;
+  transition: 0.3s;
+}
+
+/* Theme Support */
+body[data-theme="dark"] .resources-page {
+  background: linear-gradient(135deg, #0f172a, #0b1220);
+  color: #fff;
+}
+
+body[data-theme="light"] .resources-page {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+/* ========== HERO SECTION ========== */
+.resources-hero {
+  padding: 80px 20px 60px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.resources-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("https://images.unsplash.com/photo-1523580846011-d3a5bc25702b")
+    center/cover;
+    
+  /* opacity: 0.18; */
+  z-index: 0;
+}
+
+.resources-hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 900px;
+  margin: auto;
+}
+
+.resources-hero h1 {
+  font-size: 38px;
+  font-weight: 800;
+  margin-bottom: 12px;
+  animation: fadeUp 0.8s ease;
+}
+
+.resources-hero p {
+  font-size: 16px;
+  color: #94a3b8;
+  animation: fadeUp 1s ease;
+}
+
+/* ========== FILTER SECTION ========== */
+.resources-filter {
+  margin: 40px auto 20px;
+  max-width: 500px;
+  text-align: center;
+}
+
+.resources-filter select {
+  padding: 12px 18px;
+  border-radius: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.05);
+  color: inherit;
+  font-size: 14px;
+  outline: none;
+  backdrop-filter: blur(10px);
+}
+
+/* ========== GRID ========== */
+/* ===== TABLE CONTAINER ===== */
+.resources-table {
+  margin-top: 30px;
+  /* border-radius: 14px; */
+  overflow: hidden;
+}
+
+/* HEADER */
+.table-head {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  padding: 14px 18px;
+  font-weight: 600;
+  font-size: 14px;
+  background: linear-gradient(90deg,#4e50be,#60219b);
+  color: white;
+}
+
+/* ROW */
+.table-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  align-items: center;
+  padding: 14px 18px;
+  font-size: 14px;
+  border-bottom: 1px solid rgba(120,120,120,0.15);
+  transition: 0.25s;
+}
+
+.table-row:hover {
+  background: rgba(99,102,241,0.08);
+}
+
+/* TITLE */
+.t-title {
+  font-weight: 500;
+}
+
+/* SEM BADGE */
+.t-sem {
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: #3b82f6;
+  color: white;
+  text-align: center;
+  width: fit-content;
+}
+
+/* BUTTON */
+.download-btn {
+  padding: 6px 14px;
+  border-radius: 3px;
+  background: linear-gradient(90deg,#16a34a,#22c55e);
+  color: white;
+  text-decoration: none;
+  font-size: 13px;
+  text-align: center;
+  font-weight: 500;
+  transition: 0.25s;
+  width: auto;
+}
+
+.download-btn:hover {
+  opacity: 0.85;
+  transform: scale(1.05);
+}
+
+/* MESSAGE */
+.select-msg {
+  text-align: center;
+  padding: 40px;
+  font-weight: 500;
+}
+
+/* LIGHT/DARK SUPPORT */
+body[data-theme="dark"] .table-row {
+  border-color: rgba(255,255,255,0.1);
+}
+
+
+body[data-theme="dark"] .resource-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+body[data-theme="light"] .resource-card {
+  background: white;
+  border: 1px solid #e2e8f0;
+}
+
+.resource-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.resource-title {
+  font-weight: 600;
+  margin-bottom: 6px;
+  font-size: 15px;
+}
+
+.resource-sem {
+  font-size: 12px;
+  color: #6366f1;
+  margin-bottom: 12px;
+}
+
+/* Download Button */
+.download-btn {
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  background: linear-gradient(90deg, #6366f1, #8b5cf6);
+  color: white;
+  transition: 0.3s;
+}
+
+.download-btn:hover {
+  transform: scale(1.05);
+}
+
+/* ========== ANIMATION ========== */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========== MOBILE ========== */
+@media (max-width: 600px) {
+  .resources-hero h1 {
+    font-size: 26px;
+  }
+}

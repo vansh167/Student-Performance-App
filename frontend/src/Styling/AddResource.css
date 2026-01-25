@@ -1,0 +1,173 @@
+/* ================= BASE ================= */
+.admin-resource-wrapper {
+  padding: 40px 6vw;
+  min-height: 100vh;
+  background: var(--page-bg);
+}
+
+body[data-theme="dark"] {
+  --page-bg: #0f172a;
+  --card: rgba(255,255,255,0.05);
+  --border: rgba(255,255,255,0.1);
+  --text: #fff;
+}
+
+body[data-theme="light"] {
+  --page-bg: #f1f5f9;
+  --card: #fff;
+  --border: #e2e8f0;
+  --text: #0f172a;
+}
+
+/* ================= HEADER ================= */
+.admin-resource-header {
+  text-align: center;
+  padding: 40px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: white;
+  margin-bottom: 40px;
+}
+
+/* ================= TOP SECTION ================= */
+.admin-top-section {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+  margin-bottom: 40px;
+}
+
+/* Upload Panel */
+.upload-panel {
+  flex: 2;
+  background: var(--card);
+  padding: 25px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.upload-panel input,
+.upload-panel select {
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+}
+
+.upload-panel button {
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(45deg, #6366f1, #8b5cf6);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* Side Panel */
+.admin-side-panel {
+  flex: 1;
+  background: var(--card);
+  padding: 25px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+}
+
+.stats-box {
+  margin-top: 20px;
+  text-align: center;
+  padding: 20px;
+  border-radius: 14px;
+  background: linear-gradient(45deg, #22c55e, #16a34a);
+  color: white;
+}
+
+/* ================= LIBRARY ================= */
+
+
+/* ===== TABLE LAYOUT ===== */
+.resource-table-wrapper {
+  margin-top: 30px;
+  overflow-x: auto;
+  background: var(--card);
+  border-radius: 14px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+.resource-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.resource-table th {
+  text-align: left;
+  padding: 14px;
+  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  color: white;
+  font-weight: 600;
+}
+
+.resource-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+}
+
+.resource-table tr:hover {
+  background: rgba(99,102,241,0.06);
+  transition: 0.2s;
+}
+
+/* Semester Badge */
+.sem-badge {
+  background: #6366f1;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+}
+
+/* Buttons */
+.view-btn {
+  background: #22c55e;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 13px;
+}
+
+.delete-btn {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.view-btn:hover { opacity: 0.9; }
+.delete-btn:hover { opacity: 0.9; }
+
+/* Mobile responsive */
+@media (max-width: 600px) {
+  .resource-table th,
+  .resource-table td {
+    padding: 10px;
+    font-size: 12px;
+  }
+}
+
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 768px) {
+  .admin-top-section {
+    flex-direction: column;
+  }
+}

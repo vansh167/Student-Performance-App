@@ -8,23 +8,27 @@ import Home from "./Component/HomePage/Home.jsx";
 import About from "./Pages/About.jsx";  
 import Signup from "./Pages/Signup.jsx";  
 import Login from "./Pages/Login.jsx";  
-import Ranking from "./Pages/Ranking.jsx";  
+import Ranking from "./Pages/Ranking.jsx";
 import Welcome from "./Pages/Welcome.jsx";  
 import StudentAnalytics from "./Pages/StudentAnalytics.jsx";  
 import AdminPanel from "./Pages/AdminPanel.jsx";  
+import Resources from "./Pages/Resources.jsx";
+import AdminAddResource from "./Pages/AdminAddResource.jsx";
+import AdminLayout from "./Layout/AdminLayout.jsx";
 
 function PrivateRoute({ children }) {
   const token = localStorage.getItem("token");
   return token ? children : <Navigate to="/login" replace />;
 }
 
+// ✅ Navbar show/hide controller
 function Layout({ theme, setTheme, children }) {
   const location = useLocation();
 
   const hideNavbarRoutes = ["/", "/welcome", "/login", "/signup"];
   const hideNavbar = hideNavbarRoutes.includes(location.pathname);
 
- return (
+  return (
     <>
       {!hideNavbar && <Navbar theme={theme} setTheme={setTheme} />}
       {children}
@@ -77,7 +81,7 @@ export default function App() {
               </PrivateRoute>
             }
           />
-<Route path="/admin" element={<AdminPanel/>} />
+{/* <Route path="/admin" element={<AdminPanel/>} /> */}
           <Route
             path="/profile/:id"
             element={
@@ -91,9 +95,28 @@ export default function App() {
           <Route path="/ranking" element={<Ranking />} />
           <Route path="/about" element={<About />} />
           <Route path="/analytics" element={<StudentAnalytics/>} />
-
-
-          {/* fallback */}
+          
+<Route
+  path="/resources"
+  element={
+    <PrivateRoute>
+      <Resources />
+    </PrivateRoute>
+  }
+/>
+{/* ================= ADMIN ROUTES WITH SIDEBAR ================= */}
+<Route
+  path="/admin"
+  element={
+    <PrivateRoute>
+      <AdminLayout />
+    </PrivateRoute>
+  }
+>
+  <Route index element={<AdminPanel />} />
+  <Route path="add-resource" element={<AdminAddResource />} />
+</Route>
+   {/* fallback */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Layout>

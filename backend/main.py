@@ -8,8 +8,16 @@ from collections import Counter, defaultdict
 from datetime import datetime, timedelta
 import csv
 import bcrypt
-from jose import jwt, JWTError
+
+from fastapi import UploadFile, File, Form
 import os
+import shutil
+from database import resources_collection
+from fastapi.staticfiles import StaticFiles
+
+
+
+from jose import jwt, JWTError
 
 from database import students_collection, users_collection
 from models import SignupModel, LoginModel
@@ -24,6 +32,12 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24
 
 ADMIN_EMAIL = os.getenv("ADMIN_EMAIL", "admin@gmail.com")
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "12345")
+
+app = FastAPI()
+os.makedirs("uploads/resources", exist_ok=True)
+
+app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
+
 
 FRONTEND_URL = os.getenv(
     "FRONTEND_URL",
@@ -121,7 +135,6 @@ def get_current_user_id(authorization: str = Header(None)):
             raise HTTPException(status_code=401, detail="Invalid token")
 
         return {"user_id": user_id, "role": role}
-
     except JWTError:
         raise HTTPException(status_code=401, detail="Invalid token")
 
@@ -133,7 +146,7 @@ def admin_only(user=Depends(get_current_user_id)):
 
 
 # =========================
-# AUTH ROUTES
+# AUTH
 # =========================
 @app.post("/signup")
 def signup(data: SignupModel):
@@ -147,7 +160,7 @@ def signup(data: SignupModel):
         "name": data.name,
         "email": data.email,
         "password": hashed_pw.decode("utf-8"),
-        "rePassword": data.rePassword
+        "rePassword": data.rePassword  # ✅ learning
     })
 
     return {"message": "Signup successful"}
@@ -155,7 +168,7 @@ def signup(data: SignupModel):
 
 @app.post("/login")
 def login(data: LoginModel):
-    # ✅ ADMIN LOGIN
+    # ✅ Hardcoded Admin
     if data.email == ADMIN_EMAIL and data.password == ADMIN_PASSWORD:
         token = create_access_token({"user_id": "ADMIN", "role": "admin"})
         return {
@@ -210,7 +223,7 @@ def get_me(user=Depends(get_current_user_id)):
 
 
 # =========================
-# STUDENTS ROUTES
+# STUDENTS
 # =========================
 @app.post("/predict")
 def predict(student: Student):
@@ -220,14 +233,14 @@ def predict(student: Student):
 
 @app.post("/save")
 def save_student(student: Student, user=Depends(get_current_user_id)):
-    user_id = user["user_id"]
+    user_id = user["user_id"]   # ✅ FIX
 
     score, category = predict_logic(student)
 
     record = student.dict()
     record["score"] = score
     record["category"] = category
-    record["user_id"] = user_id
+    record["user_id"] = user_id   # ✅ FIX
     record["created_at"] = datetime.utcnow()
 
     students_collection.insert_one(record)
@@ -236,7 +249,7 @@ def save_student(student: Student, user=Depends(get_current_user_id)):
 
 @app.get("/students")
 def get_students(user=Depends(get_current_user_id)):
-    user_id = user["user_id"]
+    user_id = user["user_id"]   # ✅ FIX
 
     data = []
     for s in students_collection.find({"user_id": user_id}).sort("created_at", -1):
@@ -247,7 +260,7 @@ def get_students(user=Depends(get_current_user_id)):
 
 @app.get("/students/{student_id}")
 def get_student(student_id: str, user=Depends(get_current_user_id)):
-    user_id = user["user_id"]
+    user_id = user["user_id"]   # ✅ FIX
     oid = safe_object_id(student_id)
 
     student = students_collection.find_one({"_id": oid, "user_id": user_id})
@@ -260,7 +273,7 @@ def get_student(student_id: str, user=Depends(get_current_user_id)):
 
 @app.delete("/students/{student_id}")
 def delete_student(student_id: str, user=Depends(get_current_user_id)):
-    user_id = user["user_id"]
+    user_id = user["user_id"]   # ✅ FIX
     oid = safe_object_id(student_id)
 
     res = students_collection.delete_one({"_id": oid, "user_id": user_id})
@@ -272,7 +285,7 @@ def delete_student(student_id: str, user=Depends(get_current_user_id)):
 
 @app.put("/students/{student_id}")
 def update_student(student_id: str, student: Student, user=Depends(get_current_user_id)):
-    user_id = user["user_id"]
+    user_id = user["user_id"]   # ✅ FIX
     oid = safe_object_id(student_id)
 
     score, category = predict_logic(student)
@@ -298,7 +311,7 @@ def update_student(student_id: str, student: Student, user=Depends(get_current_u
 # =========================
 @app.get("/recommendations/{student_id}")
 def get_recommendations(student_id: str, user=Depends(get_current_user_id)):
-    user_id = user["user_id"]
+    user_id = user["user_id"]   # ✅ FIX
     oid = safe_object_id(student_id)
 
     student = students_collection.find_one({"_id": oid, "user_id": user_id})
@@ -327,7 +340,6 @@ def get_recommendations(student_id: str, user=Depends(get_current_user_id)):
         weaknesses = ["No major weakness detected 🎉"]
 
     recommendations = []
-
     if attendance < 75:
         recommendations.append({"icon": "ShieldCheck", "title": "Boost Attendance",
                                 "desc": "Aim for 85%+ and attend all important classes.", "tag": "High Priority"})
@@ -372,7 +384,7 @@ def get_recommendations(student_id: str, user=Depends(get_current_user_id)):
 
 
 # =========================
-# LEADERBOARD (GLOBAL)
+# LEADERBOARD
 # =========================
 @app.get("/leaderboard/all")
 def leaderboard_all():
@@ -399,15 +411,15 @@ def leaderboard_all():
 
     avg_score = round(sum([s["score"] for s in ranked]) / len(ranked), 2) if ranked else 0
 
-    return {"avg_score": avg_score, "students": ranked}
+    return {
+        "avg_score": avg_score,
+        "students": ranked
+    }
 
 
-# =========================
-# EXPORT CSV
-# =========================
 @app.get("/export/csv")
 def export_csv(user=Depends(get_current_user_id)):
-    user_id = user["user_id"]
+    user_id = user["user_id"]   # ✅ FIX
     students = list(students_collection.find({"user_id": user_id}))
 
     output = StringIO()
@@ -434,12 +446,9 @@ def export_csv(user=Depends(get_current_user_id)):
     )
 
 
-# =========================
-# ANALYTICS
-# =========================
 @app.get("/analytics")
 def analytics(user=Depends(get_current_user_id)):
-    user_id = user["user_id"]
+    user_id = user["user_id"]   # ✅ FIX
     students = list(students_collection.find({"user_id": user_id}))
 
     if not students:
@@ -455,6 +464,12 @@ def analytics(user=Depends(get_current_user_id)):
         s["_id"] = str(s["_id"])
         s["score"] = float(s.get("score", 0))
         s["created_at"] = s.get("created_at") or datetime.utcnow()
+
+        if isinstance(s["created_at"], str):
+            try:
+                s["created_at"] = datetime.fromisoformat(s["created_at"])
+            except:
+                s["created_at"] = datetime.utcnow()
 
     total = len(students)
     avg_score = round(sum([s["score"] for s in students]) / total, 2)
@@ -476,12 +491,43 @@ def analytics(user=Depends(get_current_user_id)):
                 "last_active": s["created_at"].strftime("%Y-%m-%d")
             })
 
+    trend_map = defaultdict(list)
+    last7 = datetime.utcnow() - timedelta(days=7)
+
+    for s in students:
+        if s["created_at"] >= last7:
+            day = s["created_at"].strftime("%a")
+            trend_map[day].append(s["score"])
+
+    score_trend = []
+    order = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+    for day in order:
+        if day in trend_map:
+            score_trend.append({"day": day, "score": round(sum(trend_map[day]) / len(trend_map[day]), 2)})
+        else:
+            score_trend.append({"day": day, "score": 0})
+
+    today = datetime.utcnow()
+    activity_counter = defaultdict(int)
+
+    for s in students:
+        d = s["created_at"].strftime("%Y-%m-%d")
+        activity_counter[d] += 1
+
+    activity_map = []
+    for i in range(30):
+        d = today - timedelta(days=i)
+        key = d.strftime("%Y-%m-%d")
+        activity_map.append({"date": key, "value": activity_counter.get(key, 0)})
+
+    activity_map.reverse()
+
     return {
         "summary": {"total_students": total, "avg_score": avg_score, "top_score": top_score, "low_score": low_score},
         "categories": categories,
         "active_students": active_students[:5],
-        "score_trend": [],
-        "activity_map": []
+        "score_trend": score_trend,
+        "activity_map": activity_map
     }
 
 
@@ -520,16 +566,64 @@ def admin_user_students(uid: str, admin=Depends(admin_only)):
 
 @app.delete("/admin/users/{uid}")
 def delete_user(uid: str, admin=Depends(admin_only)):
-    # ✅ prevent ObjectId crash
-    try:
-        oid = ObjectId(uid)
-    except:
-        raise HTTPException(status_code=400, detail="Invalid user id")
-
     students_collection.delete_many({"user_id": uid})
 
-    res = users_collection.delete_one({"_id": oid})
+    res = users_collection.delete_one({"_id": ObjectId(uid)})
     if res.deleted_count == 0:
         raise HTTPException(status_code=404, detail="User not found")
 
     return {"message": "User deleted successfully"}
+
+
+
+@app.post("/admin/resources/upload")
+def upload_resource(
+    title: str = Form(...),
+    semester: str = Form(...),
+    pdf: UploadFile = File(...),
+    admin=Depends(admin_only)
+):
+    unique_name = f"{datetime.utcnow().timestamp()}_{pdf.filename}"
+    file_path = f"uploads/resources/{unique_name}"
+    file_url = f"/uploads/resources/{unique_name}"
+
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(pdf.file, buffer)
+
+    resources_collection.insert_one({
+        "title": title,
+        "semester": semester,
+        "file_url": file_url,
+        "uploaded_at": datetime.utcnow()
+    })
+
+    return {"message": "PDF uploaded successfully"}
+
+
+@app.get("/resources")
+def get_resources():
+    data = []
+    for r in resources_collection.find().sort("uploaded_at", -1):
+        r["_id"] = str(r["_id"])
+        data.append(r)
+    return data
+@app.get("/resources")
+def get_resources():
+    data = []
+    for r in resources_collection.find().sort("uploaded_at", -1):
+        r["_id"] = str(r["_id"])
+        data.append(r)
+    return data
+@app.delete("/admin/resources/{rid}")
+def delete_resource(rid: str, admin=Depends(admin_only)):
+    resource = resources_collection.find_one({"_id": ObjectId(rid)})
+    if not resource:
+        raise HTTPException(status_code=404, detail="Resource not found")
+
+    # delete file from folder
+    file_path = resource["file_url"].replace("/uploads/", "uploads/")
+    if os.path.exists(file_path):
+        os.remove(file_path)
+
+    resources_collection.delete_one({"_id": ObjectId(rid)})
+    return {"message": "Resource deleted"}

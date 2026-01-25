@@ -8,11 +8,13 @@ MONGO_URL = os.getenv("MONGO_URL")
 DB_NAME = os.getenv("DB_NAME")
 COLLECTION = os.getenv("COLLECTION")
 
-STUDENTS_COLLECTION = os.getenv("COLLECTION")  # students collection name
-USERS_COLLECTION = os.getenv("USERS_COLLECTION", "users")  # default users
-
+# 1️⃣ Connect MongoDB
 client = MongoClient(MONGO_URL)
+
+# 2️⃣ Create database
 db = client[DB_NAME]
 
+# 3️⃣ Collections
 students_collection = db[COLLECTION]
 users_collection = db["users"]
+resources_collection = db["resources"]   # ✅ now db exists

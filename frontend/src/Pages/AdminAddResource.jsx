@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
 import "../Styling/AddResource.css";
 
-// ✅ Your deployed backend
 const API_BASE = "https://student-performance-backend-xgvt.onrender.com";
 
-// Subjects per semester
 const subjectsBySem = {
   SEM1: [
     "Mathematics I",
@@ -50,7 +48,6 @@ const subjectsBySem = {
   ]
 };
 
-
 export default function AdminAddResource() {
   const [title, setTitle] = useState("");
   const [semester, setSemester] = useState("SEM1");
@@ -58,6 +55,7 @@ export default function AdminAddResource() {
   const [file, setFile] = useState(null);
   const [resources, setResources] = useState([]);
   const [filterSem, setFilterSem] = useState("");
+  const [loading, setLoading] = useState(false); // ✅ NEW
 
   const token = localStorage.getItem("token");
 
@@ -73,23 +71,42 @@ export default function AdminAddResource() {
 
   useEffect(() => { fetchResources(); }, []);
 
+  // ================= UPLOAD FUNCTION =================
   const uploadPDF = async (e) => {
     e.preventDefault();
+
+    if (!file) {
+      alert("Please select a PDF file.");
+      return;
+    }
+
+    setLoading(true); // ✅ Start loading
+
     const formData = new FormData();
     formData.append("title", title);
     formData.append("semester", semester);
-    formData.append("subject", subject); // ✅ NEW
+    formData.append("subject", subject);
     formData.append("pdf", file);
 
-    await fetch(`${API_BASE}/admin/resources/upload`, {
-      method: "POST",
-      headers: { Authorization: `Bearer ${token}` },
-      body: formData,
-    });
+    try {
+      const res = await fetch(`${API_BASE}/admin/resources/upload`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
+      });
 
-    setTitle("");
-    setFile(null);
-    fetchResources();
+      if (!res.ok) throw new Error();
+
+      alert("✅ PDF uploaded successfully!");
+      setTitle("");
+      setFile(null);
+      fetchResources();
+
+    } catch (err) {
+      alert("❌ Upload failed. Try again.");
+    }
+
+    setLoading(false); // ✅ Stop loading
   };
 
   const deleteResource = async (id) => {
@@ -108,7 +125,6 @@ export default function AdminAddResource() {
     <div className="admin-resource-wrapper">
 
       <div className="admin-top-section">
-
         <form className="upload-panel" onSubmit={uploadPDF}>
           <h3>Upload New Paper</h3>
 
@@ -120,32 +136,38 @@ export default function AdminAddResource() {
             required
           />
 
-          {/* Semester */}
           <select value={semester} onChange={(e) => setSemester(e.target.value)}>
             {Object.keys(subjectsBySem).map(sem => (
               <option key={sem} value={sem}>{sem}</option>
             ))}
           </select>
 
-          {/* Subject */}
           <select value={subject} onChange={(e) => setSubject(e.target.value)}>
             {subjectsBySem[semester].map(sub => (
               <option key={sub} value={sub}>{sub}</option>
             ))}
           </select>
 
-          <input type="file" accept="application/pdf" onChange={(e) => setFile(e.target.files[0])} required />
-          <button type="submit">Upload PDF</button>
+          <input
+            type="file"
+            accept="application/pdf"
+            onChange={(e) => setFile(e.target.files[0])}
+            required
+          />
+
+          {/* ✅ BUTTON WITH LOADING */}
+          <button type="submit" disabled={loading}>
+            {loading ? "Uploading..." : "Upload PDF"}
+          </button>
         </form>
       </div>
 
-      {/* Table */}
       <table className="resource-table">
         <thead>
           <tr>
             <th>Title</th>
             <th>Semester</th>
-            <th>Subject</th> {/* NEW */}
+            <th>Subject</th>
             <th>View</th>
             <th>Delete</th>
           </tr>
@@ -155,9 +177,15 @@ export default function AdminAddResource() {
             <tr key={r._id}>
               <td>{r.title}</td>
               <td>{r.semester}</td>
-              <td>{r.subject}</td> {/* NEW */}
-              <td><a href={`${API_BASE}${r.file_url}`} target="_blank">View</a></td>
-              <td><button onClick={() => deleteResource(r._id)}>Delete</button></td>
+              <td>{r.subject}</td>
+              <td>
+                <a href={`${API_BASE}${r.file_url}`} target="_blank" rel="noreferrer">
+                  View
+                </a>
+              </td>
+              <td>
+                <button onClick={() => deleteResource(r._id)}>Delete</button>
+              </td>
             </tr>
           ))}
         </tbody>
@@ -165,5 +193,3 @@ export default function AdminAddResource() {
     </div>
   );
 }
-
-

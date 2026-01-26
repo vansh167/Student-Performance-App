@@ -576,6 +576,8 @@ def delete_user(uid: str, admin=Depends(admin_only)):
 
 
 
+from fastapi import Form, File, UploadFile
+
 @app.post("/admin/resources/upload")
 async def upload_resource(
     title: str = Form(...),
@@ -602,13 +604,6 @@ async def upload_resource(
     return {"message": "Uploaded successfully"}
 
 
-@app.get("/resources")
-def get_resources():
-    data = []
-    for r in resources_collection.find().sort("uploaded_at", -1):
-        r["_id"] = str(r["_id"])
-        data.append(r)
-    return data
 @app.get("/resources")
 def get_resources():
     data = []

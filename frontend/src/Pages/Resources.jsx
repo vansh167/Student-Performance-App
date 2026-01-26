@@ -148,7 +148,7 @@ export default function Resources() {
         ) : (
           <>
             <div className="table-head">
-              <span>Title</span>
+              <span>Subject</span>
               <span>Semester</span>
               <span>Download</span>
             </div>
@@ -172,5 +172,6 @@ export default function Resources() {
     </div>
   );
 }
+
 
 

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "../Styling/Resources.css";
 
-// ✅ Deployed backend
+// ✅ Backend
 const API_BASE = "https://student-performance-backend-xgvt.onrender.com";
 
 // Subjects per semester
@@ -18,6 +18,7 @@ export default function Resources() {
   const [resources, setResources] = useState([]);
   const [semester, setSemester] = useState("");
   const [subject, setSubject] = useState("");
+  const [downloading, setDownloading] = useState(null);
 
   useEffect(() => {
     fetch(`${API_BASE}/resources`)
@@ -25,6 +26,26 @@ export default function Resources() {
       .then((data) => setResources(Array.isArray(data) ? data : []))
       .catch((err) => console.error("Fetch error:", err));
   }, []);
+
+  // 🔽 FORCE DOWNLOAD FUNCTION
+  const handleDownload = async (url, title) => {
+    try {
+      setDownloading(title);
+      const response = await fetch(`${API_BASE}${url}`);
+      const blob = await response.blob();
+
+      const link = document.createElement("a");
+      link.href = window.URL.createObjectURL(blob);
+      link.download = `${title}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (err) {
+      console.error("Download failed:", err);
+    } finally {
+      setDownloading(null);
+    }
+  };
 
   const filtered = resources.filter(
     (r) => r.semester === semester && r.subject === subject
@@ -38,7 +59,8 @@ export default function Resources() {
         <div className="resources-hero-overlay" />
         <div className="resources-hero-content">
           <h1>
-            <span style={{color:"#d6891e"}}>BCA</span> Semester Question Papers</h1>
+  <span style={{ color: "#f09f13" }}>BCA Previous Year</span> Question Papers Collection
+</h1>
           <p>Select your semester and subject to access papers</p>
         </div>
       </div>
@@ -98,14 +120,13 @@ export default function Resources() {
               <div key={r._id} className="table-row">
                 <span className="t-title">{r.title}</span>
                 <span className="t-sem">{r.semester}</span>
-                <a
-                  href={`${API_BASE}${r.file_url}`}
-                  target="_blank"
-                  rel="noreferrer"
+
+                <button
                   className="download-btn"
+                  onClick={() => handleDownload(r.file_url, r.title)}
                 >
-                  Download
-                </a>
+                  {downloading === r.title ? "Downloading..." : "Download"}
+                </button>
               </div>
             ))}
           </>
@@ -114,5 +135,3 @@ export default function Resources() {
     </div>
   );
 }
-
-

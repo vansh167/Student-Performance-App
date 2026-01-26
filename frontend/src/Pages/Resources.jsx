@@ -37,7 +37,8 @@ export default function Resources() {
       <div className="resources-hero">
         <div className="resources-hero-overlay" />
         <div className="resources-hero-content">
-          <h1>BCA Semester Question Papers</h1>
+          <h1>
+            <span style={{color:"#d6891e"}}>BCA</span> Semester Question Papers</h1>
           <p>Select your semester and subject to access papers</p>
         </div>
       </div>
@@ -113,4 +114,5 @@ export default function Resources() {
     </div>
   );
 }
+
 

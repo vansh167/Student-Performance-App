@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import "../Styling/Resources.css";
+import emptyGif from "../assets/empty.svg";
 
 // ✅ Backend
 const API_BASE = "https://student-performance-backend-xgvt.onrender.com";
@@ -139,16 +140,31 @@ export default function Resources() {
 
       {/* TABLE */}
       <div className="resources-table">
-        {!semester ? (
-          <div className="select-msg">📚 Please select a semester</div>
-        ) : !subject ? (
-          <div className="select-msg">📘 Please select a subject</div>
-        ) : filtered.length === 0 ? (
-          <div className="select-msg">No question papers uploaded yet.</div>
-        ) : (
-          <>
+  {!semester ? (
+    <div className="empty-state">
+      <img src={emptyGif} alt="Select Semester" />
+     <h2 className="empty-title">All set!</h2>
+  <p className="empty-subtitle">
+    Select your semester and subject to view question papers.
+  </p>
+  </div>
+  ) : !subject ? (
+    <div className="empty-state">
+      <img src={emptyGif} alt="Select Subject" />
+    <h2 className="empty-title">All set!</h2>
+  <p className="empty-subtitle">
+    Select your semester and subject to view question papers.
+  </p>
+  </div>
+  ) : filtered.length === 0 ? (
+    <div className="empty-state">
+      <img src={emptyGif} alt="No Papers" />
+      <p>No question papers uploaded yet.</p>
+    </div>
+  ) : (
+    <>
             <div className="table-head">
-              <span>Subject</span>
+              <span>Title</span>
               <span>Semester</span>
               <span>Download</span>
             </div>
@@ -157,13 +173,14 @@ export default function Resources() {
               <div key={r._id} className="table-row">
                 <span className="t-title">{r.title}</span>
                 <span className="t-sem">{r.semester}</span>
-
-                <button
+                <a
+                  href={`${API_BASE}${r.file_url}`}
+                  target="_blank"
+                  rel="noreferrer"
                   className="download-btn"
-                  onClick={() => handleDownload(r.file_url, r.title)}
                 >
-                  {downloading === r.title ? "Downloading..." : "Download"}
-                </button>
+                  Download
+                </a>
               </div>
             ))}
           </>
@@ -172,6 +189,7 @@ export default function Resources() {
     </div>
   );
 }
+
 
 
 

@@ -6,22 +6,50 @@ const API_BASE = "https://student-performance-backend-xgvt.onrender.com";
 
 // Subjects per semester
 const subjectsBySem = {
-  SEM1: ["Mathematics-I", "Applied English", "Computer Fundamentals
-", "C Programming", "Office Automation Tools"],
-  SEM2: ["Mathematics-II", "Communicative English", "Digital Electronics
-", "Data Structures", "Database Management System
-"],
-  SEM3: ["Mathematics-III", "Business Practices and Management
-", "Computer Organization", " C++", "Desktop Publishing and Designing
-"],
-  SEM4: ["Personnel Management", "Accounting", "System Analysis and Design",
-        "Internet Technology and Web Page Design","Programming In Visual Basic
-"],
-  SEM5: ["Operating System", "eCommerce","Management Information System","ASP.net Technologies","Computer Oriented Statistical Methods
-"],
-  SEM6: ["Computer Networks", "Numerical Methods
-","Multimedia Technology","Computer Graphics","Software Engineering"],
+  SEM1: [
+    "Mathematics I",
+    "Applied English",
+    "Computer Fundamentals",
+    "C Programming",
+    "Office Automation Tools"
+  ],
+  SEM2: [
+    "Mathematics II",
+    "Communicative English",
+    "Digital Electronics",
+    "Data Structures",
+    "Database Management System"
+  ],
+  SEM3: [
+    "Mathematics III",
+    "Business Practices and Management",
+    "Computer Organization",
+    "C++ Programming",
+    "Desktop Publishing and Designing"
+  ],
+  SEM4: [
+    "Personnel Management",
+    "Accounting",
+    "System Analysis and Design",
+    "Internet Technology and Web Page Design",
+    "Programming in Visual Basic"
+  ],
+  SEM5: [
+    "Operating System",
+    "E-Commerce",
+    "Management Information System",
+    "ASP.NET Technologies",
+    "Computer-Oriented Statistical Methods"
+  ],
+  SEM6: [
+    "Computer Networks",
+    "Numerical Methods",
+    "Multimedia Technology",
+    "Computer Graphics",
+    "Software Engineering"
+  ]
 };
+
 
 export default function Resources() {
   const [resources, setResources] = useState([]);
@@ -144,4 +172,5 @@ export default function Resources() {
     </div>
   );
 }
+
 

@@ -6,12 +6,21 @@ const API_BASE = "https://student-performance-backend-xgvt.onrender.com";
 
 // Subjects per semester
 const subjectsBySem = {
-  SEM1: ["Math", "English", "C", "Python", "VSCode"],
-  SEM2: ["Math2", "English2", "Data Structures", "DBMS", "OS"],
-  SEM3: ["Java", "Web Dev", "DSA", "Computer Networks"],
-  SEM4: ["AI", "ML", "Software Engg"],
-  SEM5: ["Cloud", "Cyber Security"],
-  SEM6: ["Project", "Internship"],
+  SEM1: ["Mathematics-I", "Applied English", "Computer Fundamentals
+", "C Programming", "Office Automation Tools"],
+  SEM2: ["Mathematics-II", "Communicative English", "Digital Electronics
+", "Data Structures", "Database Management System
+"],
+  SEM3: ["Mathematics-III", "Business Practices and Management
+", "Computer Organization", " C++", "Desktop Publishing and Designing
+"],
+  SEM4: ["Personnel Management", "Accounting", "System Analysis and Design",
+        "Internet Technology and Web Page Design","Programming In Visual Basic
+"],
+  SEM5: ["Operating System", "eCommerce","Management Information System","ASP.net Technologies","Computer Oriented Statistical Methods
+"],
+  SEM6: ["Computer Networks", "Numerical Methods
+","Multimedia Technology","Computer Graphics","Software Engineering"],
 };
 
 export default function Resources() {
@@ -135,3 +144,4 @@ export default function Resources() {
     </div>
   );
 }
+

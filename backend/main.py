@@ -45,7 +45,6 @@ FRONTEND_URL = os.getenv(
 )
 
 
-app = FastAPI()
 
 # =========================
 # CORS (DEPLOY SAFE)

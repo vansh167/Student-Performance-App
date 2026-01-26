@@ -577,27 +577,29 @@ def delete_user(uid: str, admin=Depends(admin_only)):
 
 
 @app.post("/admin/resources/upload")
-def upload_resource(
+async def upload_resource(
     title: str = Form(...),
     semester: str = Form(...),
-    pdf: UploadFile = File(...),
-    admin=Depends(admin_only)
+    subject: str = Form(...),
+    pdf: UploadFile = File(...)
 ):
-    unique_name = f"{datetime.utcnow().timestamp()}_{pdf.filename}"
-    file_path = f"uploads/resources/{unique_name}"
-    file_url = f"/uploads/resources/{unique_name}"
+    # Save file inside uploads/resources folder
+    file_location = f"uploads/resources/{pdf.filename}"
 
-    with open(file_path, "wb") as buffer:
-        shutil.copyfileobj(pdf.file, buffer)
+    with open(file_location, "wb") as f:
+        f.write(await pdf.read())
 
-    resources_collection.insert_one({
+    resource = {
         "title": title,
         "semester": semester,
-        "file_url": file_url,
+        "subject": subject,
+        "file_url": f"/uploads/resources/{pdf.filename}",  # correct URL
         "uploaded_at": datetime.utcnow()
-    })
+    }
 
-    return {"message": "PDF uploaded successfully"}
+    resources_collection.insert_one(resource)
+
+    return {"message": "Uploaded successfully"}
 
 
 @app.get("/resources")

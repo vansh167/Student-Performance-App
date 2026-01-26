@@ -272,3 +272,39 @@ body[data-theme="light"] .resource-card {
     gap: 15px;
   }
 }
+
+.empty-state {
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+}
+
+/* GIF */
+.empty-state img {
+  width: auto;
+  max-width: 80%;
+  margin-bottom: 20px;
+  opacity: 0.95;
+}
+
+/* Main line (like "All caught up!") */
+.empty-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
+}
+
+/* Sub text (like "Take a break...") */
+.empty-subtitle {
+  font-size: 15px;
+  color: #9ca3af;
+  max-width: 420px;
+  line-height: 1.5;
+}
+

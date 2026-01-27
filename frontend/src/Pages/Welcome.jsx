@@ -297,9 +297,17 @@ export default function Welcome() {
             {/* Live Panel */}
             <div className="livePanel reveal">
               <div className="liveHead">
-                <h3>Live Result Preview</h3>
-                <span className="liveTag">Auto Generated</span>
-              </div>
+  
+  
+  <h3>
+    Live Result Preview
+    <span className="liveIndicator">
+      <span className="liveDot"></span> LIVE
+    </span>
+  </h3>
+  <span className="liveTag">Auto Generated</span>
+</div>
+
 
               <div className="liveGrid">
                 <div className="liveBox">
@@ -421,9 +429,15 @@ export default function Welcome() {
           {/* Leaderboard */}
           <div className="rankPanel reveal" style={{"marginTop":"30px", marginBottom:"-80px"}}>
             <div className="rankHead">
-              <h3>Leaderboard (Top 3 Preview)</h3>
-              <span className="rankBadge">Live Ranking</span>
-            </div>
+  <h3>
+    Leaderboard (Top 3 Preview)
+    <span className="liveIndicator">
+      <span className="liveDot"></span> LIVE
+    </span>
+  </h3>
+  <span className="rankBadge">Live Ranking</span>
+</div>
+
 
             <div className="rankList">
               <div className="rankRow gold">

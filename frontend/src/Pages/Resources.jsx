@@ -70,7 +70,7 @@ export default function Resources() {
         <div className="resources-hero-overlay" />
         <div className="resources-hero-content">
           <h1>
-            <span style={{ color: "#7c46fc" }}>BCA Previous Year</span> Question Papers Collection
+            <span style={{ color: "#e6b102" }}>BCA Previous Year</span> Question Papers Collection
           </h1>
           <p>Select your semester and subject to access papers</p>
         </div>
